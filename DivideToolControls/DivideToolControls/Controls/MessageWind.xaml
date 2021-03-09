@@ -1,0 +1,39 @@
+﻿<Window x:Class="DivideToolControls.Controls.MessageWind"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DivideToolControls.Controls"
+        mc:Ignorable="d" AllowsTransparency="True" 
+        Background="#00FFFFFF" WindowStyle="None" WindowState="Normal" 
+        ResizeMode="NoResize" Width="400" Height="200" 
+        Title="MessageWind" 
+        MouseLeftButtonDown="Window_MouseLeftButtonDown" KeyDown="Window_KeyDown">
+    <Grid Name="LayoutRoot" Width="Auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="56" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="68" />
+        </Grid.RowDefinitions>
+        <Rectangle Grid.RowSpan="3" Style="{DynamicResource DialogBackgroundRectangleStyle}" />
+        <Border Name="TitleArea" Style="{DynamicResource DialogTitleBorderStyle}" Margin="16,16,16,0" VerticalAlignment="Top">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Image Name="IcoImage" Width="28" Height="28" Margin="5" Stretch="Fill" Source="{Binding IconSource}" />
+                <Label Name="_Title" Style="{DynamicResource DialogTitleLabelStyle}" Content="Message" Margin="4" />
+            </StackPanel>
+        </Border>
+        <Border Name="BodyArea" Grid.Row="1" Margin="34,16,34,10">
+            <TextBlock Name="_Message" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" />
+        </Border>
+        <Border Name="CommandArea" Grid.Row="2" Style="{DynamicResource DialogCommandAreaBorderStyle}" Margin="16,0,16,16" VerticalAlignment="Bottom" Height="52" CornerRadius="8">
+            <Grid>
+                <CheckBox Name="_DoNotShowAgain" Style="{DynamicResource CheckBoxStyle2}" Margin="20,12,0,0" Visibility="Hidden" FontStyle="Italic">Do not show this message again</CheckBox>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,17,0">
+                    <Button Name="_OKButton" Style="{DynamicResource ButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" IsDefault="True" Width="95" ScrollViewer.VerticalScrollBarVisibility="Disabled" Content="OK" Click="_OKButton_Click" />
+                    <Button Name="_NoButton" Style="{DynamicResource ButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Width="95" ScrollViewer.VerticalScrollBarVisibility="Disabled" Content="NO" Click="_NoButton_Click" />
+                    <Button Name="_CancelButton" IsCancel="True" Style="{DynamicResource ButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="95" ScrollViewer.VerticalScrollBarVisibility="Disabled" Content="Cancel" Click="_CancelButton_Click" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

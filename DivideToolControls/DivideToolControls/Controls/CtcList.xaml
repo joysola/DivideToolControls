@@ -1,0 +1,266 @@
+﻿<UserControl x:Class="DivideToolControls.Controls.CtcList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DivideToolControls.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <Style x:Key="{x:Type DataGrid}" TargetType="{x:Type DataGrid}">
+                <Setter Property="DataGrid.CanUserResizeColumns" Value="False" />
+                <Setter Property="Background" Value="#E6DBBB" />
+                <Setter Property="BorderBrush" Value="#d6c79b" />
+                <Setter Property="DataGrid.HorizontalGridLinesBrush">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#d6c79b" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="DataGrid.VerticalGridLinesBrush">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#d6c79b" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="{x:Type DataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="UIElement.SnapsToDevicePixels" Value="True" />
+                <Setter Property="MinWidth" Value="0" />
+                <Setter Property="MinHeight" Value="28" />
+                <Setter Property="Foreground" Value="#323433" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FrameworkElement.Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                            <Border Name="BackgroundBorder" BorderThickness="0,1,0,1" BorderBrush="#e6dbba" Width="Auto">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                    <Path Name="SortArrow" Visibility="Collapsed" Data="M0,0 L1,0 L0.5,1" Stretch="Fill" Grid.Column="2" Width="8" Height="6" Fill="#FFFFFFFF" Margin="0,0,50,0" VerticalAlignment="Center" RenderTransformOrigin="1,1" />
+                                    <Rectangle Width="1" Fill="#d6c79b" HorizontalAlignment="Right" Grid.ColumnSpan="1" />
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Height" Value="25" />
+            </Style>
+            <Style x:Key="{x:Type DataGridRow}" TargetType="{x:Type DataGridRow}">
+                <Setter Property="Background" Value="#F2F2F2" />
+                <Setter Property="Height" Value="40" />
+                <Setter Property="Foreground" Value="#FF000000" />
+                <Style.Triggers>
+                    <Trigger Property="DataGridRow.AlternationIndex" Value="0">
+                        <Setter Property="Background" Value="#e7e7e7" />
+                    </Trigger>
+                    <Trigger Property="DataGridRow.AlternationIndex" Value="1">
+                        <Setter Property="Background" Value="#f2f2f2" />
+                    </Trigger>
+                    <Trigger Property="UIElement.IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#FFD3D3D3" />
+                    </Trigger>
+                    <Trigger Property="DataGridRow.IsSelected" Value="True">
+                        <Setter Property="Foreground" Value="#FF000000" />
+                        <Setter Property="Background" Value="#FFFF0000" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="{x:Type DataGridCell}" TargetType="{x:Type DataGridCell}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridCell}">
+                            <TextBlock TextAlignment="Center" VerticalAlignment="Center">
+                <ContentPresenter />
+                            </TextBlock>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="DataGridCell.IsSelected" Value="True" />
+                </Style.Triggers>
+            </Style>
+            <TransformGroup x:Key="Imageview">
+                <ScaleTransform />
+                <TranslateTransform />
+            </TransformGroup>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="35" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+                <Border BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">姓名</TextBlock>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="1" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBox Name="txt_Name" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" />
+                </Border>
+                <Border Grid.Row="0" Grid.Column="2" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">性别</TextBlock>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="3" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBox Name="txt_Sex" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" />
+                </Border>
+                <Border BorderBrush="#FF000000" BorderThickness="1" Grid.Row="1">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">年龄</TextBlock>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="1" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBox Name="txt_Age" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" />
+                </Border>
+                <Border Grid.Row="1" Grid.Column="2" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">住院号</TextBlock>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="3" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBox Name="txt_Hos" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" />
+                </Border>
+                <Border BorderBrush="#FF000000" BorderThickness="1" Grid.Row="2">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">病区</TextBlock>
+                </Border>
+                <Border Grid.Row="2" Grid.Column="1" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBox Name="txt_Bq" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100">08</TextBox>
+                </Border>
+                <Border Grid.Row="2" Grid.Column="2" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">床号</TextBlock>
+                </Border>
+                <Border Grid.Row="2" Grid.Column="3" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBox Name="txt_Bed" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" />
+                </Border>
+                <Border BorderBrush="#FF000000" BorderThickness="1" Grid.Row="3">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">确诊</TextBlock>
+                </Border>
+                <Border Grid.Row="3" Grid.Column="1" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBlock Name="txt_qzsl" HorizontalAlignment="Left" VerticalAlignment="Center">0</TextBlock>
+                </Border>
+                <Border Grid.Row="3" Grid.Column="2" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">疑似</TextBlock>
+                </Border>
+                <Border Grid.Row="3" Grid.Column="3" BorderBrush="#FF000000" BorderThickness="1">
+                    <TextBlock Name="txt_xssl" HorizontalAlignment="Left" VerticalAlignment="Center">0</TextBlock>
+                </Border>
+                <Border Grid.Row="5" Grid.ColumnSpan="4" BorderBrush="#FF000000" BorderThickness="1">
+                    <Button Name="Generatepdf" Height="25" Width="80" Click="Generatepdf_Click">生成报告</Button>
+                </Border>
+                <TextBox Name="txt_diagnosis" Grid.Row="4" Grid.ColumnSpan="4" Height="100" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible">请填写诊断信息...</TextBox>
+            </Grid>
+            <StackPanel>
+                <DataGrid Name="DgList" Grid.Row="2" Height="800" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" AlternationCount="2" Margin="1,1,0,0" IsReadOnly="True" CanUserAddRows="False" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding}" LoadingRow="DgList_LoadingRow">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="尺寸(um)" Width="60">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <Label Width="80" Height="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="{Binding Size}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="精细查看" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Button Name="dlook" Margin="2" Content="多层查看" Cursor="Hand" Tag="{Binding index}">
+                                            <Control.Template>
+                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                    <TextBlock TextDecorations="Underline">
+                            <ContentPresenter />
+                                                    </TextBlock>
+                                                </ControlTemplate>
+                                            </Control.Template>
+                                            <FrameworkElement.Style>
+                                                <Style TargetType="{x:Type Button}">
+                                                    <Setter Property="Foreground" Value="#FF0000FF" />
+                                                    <Style.Triggers>
+                                                        <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                                            <Setter Property="Foreground" Value="#FF008000" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </FrameworkElement.Style>
+                                        </Button>
+                                        <Button Name="glook_Click" Margin="2" Content="高倍查看" Cursor="Hand" Tag="{Binding index}">
+                                            <Control.Template>
+                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                    <TextBlock TextDecorations="Underline">
+                            <ContentPresenter />
+                                                    </TextBlock>
+                                                </ControlTemplate>
+                                            </Control.Template>
+                                            <FrameworkElement.Style>
+                                                <Style TargetType="{x:Type Button}">
+                                                    <Setter Property="Foreground" Value="#FF0000FF" />
+                                                    <Style.Triggers>
+                                                        <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                                            <Setter Property="Foreground" Value="#FF008000" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </FrameworkElement.Style>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="诊断" Width="160">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <RadioButton Content="正常" Tag="0" />
+                                        <RadioButton Content="疑似" Tag="1" />
+                                        <RadioButton Content="确诊" Tag="2" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="操作" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="DeleteItem" Margin="2" Content="删除" Cursor="Hand" Tag="{Binding index}">
+                                        <Control.Template>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <TextBlock TextDecorations="Underline">
+                          <ContentPresenter />
+                                                </TextBlock>
+                                            </ControlTemplate>
+                                        </Control.Template>
+                                        <FrameworkElement.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Setter Property="Foreground" Value="#FF0000FF" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                                        <Setter Property="Foreground" Value="#FF008000" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </FrameworkElement.Style>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </StackPanel>
+    </Grid
+</UserControl>

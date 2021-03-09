@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A8DB18EB-2974-4816-A720-C8901F580D50}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>DivideToolControls</RootNamespace>
+    <AssemblyName>DivideToolControls</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Controls\MessageWind.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Navmap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ScaleRuler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Slider3D.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\MessageWind.xaml.cs">
+      <DependentUpon>MessageWind.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Navmap.xaml.cs">
+      <DependentUpon>Navmap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DeepZoomControls\VirtualPanel.cs" />
+    <Compile Include="DeepZoom\DeepZoomImageTileSource.cs" />
+    <Compile Include="DeepZoom\DeepZoomImageTileSourceConverter.cs" />
+    <Compile Include="DeepZoom\DisplayRect.cs" />
+    <Compile Include="DeepZoom\ImageLoader.cs" />
+    <Compile Include="DeepZoom\MultiScaleImage.cs" />
+    <Compile Include="Controls\ScaleRuler.xaml.cs">
+      <DependentUpon>ScaleRuler.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Slider3D.xaml.cs">
+      <DependentUpon>Slider3D.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DeepZoomControls\ZoomableCanvas.cs" />
+    <Compile Include="DeepZoom\MultiScaleImageSpatialItemsSource.cs" />
+    <Compile Include="DeepZoom\MultiScaleTileSource.cs" />
+    <Compile Include="DeepZoom\Tile.cs" />
+    <Compile Include="DeepZoom\TileHost.cs" />
+    <Compile Include="DeepZoom\VisualTile.cs" />
+    <Compile Include="DynamicGeometry\AnnoListControl.cs" />
+    <Compile Include="DynamicGeometry\AnnotationBase.cs" />
+    <Compile Include="DynamicGeometry\Enum\AnnotationType.cs" />
+    <Compile Include="DynamicGeometry\Enum\Direction.cs" />
+    <Compile Include="Extensions\DataStructure\PriorityQuadTree.cs" />
+    <Compile Include="Extensions\DataStructure\PriorityQueue.cs" />
+    <Compile Include="Extensions\LinkedListExtension.cs" />
+    <Compile Include="Extensions\MathExtension.cs" />
+    <Compile Include="Extensions\RectExtension.cs" />
+    <Compile Include="Helper\ControlHelper.cs" />
+    <Compile Include="Helper\DllImageFuc.cs" />
+    <Compile Include="Helper\IMAGE_INFO_STRUCT.cs" />
+    <Compile Include="Helper\KCommon.cs" />
+    <Compile Include="Helper\MemoryHelper.cs" />
+    <Compile Include="Helper\ZoomHelper.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Themes\kfbioblue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\MultiScaleImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Model\CtcVo.cs" />
+    <Compile Include="Model\IniFile.cs" />
+    <Compile Include="Model\MagicZoomTileSource1.cs" />
+    <Compile Include="Model\mRectangle.cs" />
+    <Compile Include="Model\Setting.cs" />
+    <Compile Include="Model\ZoomModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="2020-12-04_15_53_56.kfb" />
+    <None Include="Config.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\about.png" />
+    <Resource Include="images\adjust.png" />
+    <Resource Include="images\analytics.png" />
+    <Resource Include="images\bei1.png" />
+    <Resource Include="images\bei10.png" />
+    <Resource Include="images\bei101.png" />
+    <Resource Include="images\bei11.png" />
+    <Resource Include="images\bei2.png" />
+    <Resource Include="images\bei20.png" />
+    <Resource Include="images\bei201.png" />
+    <Resource Include="images\bei21.png" />
+    <Resource Include="images\bei4.png" />
+    <Resource Include="images\bei40.png" />
+    <Resource Include="images\bei401.png" />
+    <Resource Include="images\bei41.png" />
+    <Resource Include="images\bei5.png" />
+    <Resource Include="images\bei51.png" />
+    <Resource Include="images\bk_1.png" />
+    <Resource Include="images\caseinfo.png" />
+    <Resource Include="images\close.jpg" />
+    <Resource Include="images\color.png" />
+    <Resource Include="images\ctc.png" />
+    <Resource Include="images\ctcimg.png" />
+    <Resource Include="images\ctcrect.png" />
+    <Resource Include="images\dashboard.png" />
+    <Resource Include="images\downarrow.png" />
+    <Resource Include="images\edit.png" />
+    <Resource Include="images\escfull.png" />
+    <Resource Include="images\fullscreen.png" />
+    <Resource Include="images\gb.png" />
+    <Resource Include="images\head_logo.png" />
+    <Resource Include="images\help.png" />
+    <Resource Include="images\imageinfo.png" />
+    <Resource Include="images\jt.png" />
+    <Resource Include="images\jx.png" />
+    <Resource Include="images\kviewericon_1_allsize.ico" />
+    <Resource Include="images\KViewerIcon_2_allSize.ico" />
+    <Resource Include="images\KViewerIcon_4_allSize.ico" />
+    <Resource Include="images\KViewerIcon_5_allSize.ico" />
+    <Resource Include="images\KViewerIcon_5_allSize.png" />
+    <Resource Include="images\label.png" />
+    <Resource Include="images\list.png" />
+    <Resource Include="images\list1.png" />
+    <Resource Include="images\list2.png" />
+    <Resource Include="images\list3.png" />
+    <Resource Include="images\list4.png" />
+    <Resource Include="images\list5.png" />
+    <Resource Include="images\list6.png" />
+    <Resource Include="images\list7.png" />
+    <Resource Include="images\list8.png" />
+    <Resource Include="images\load.gif" />
+    <Resource Include="images\logo.ico" />
+    <Resource Include="images\logo.png" />
+    <Resource Include="images\logo2.png" />
+    <Resource Include="images\logo3.png" />
+    <Resource Include="images\logo4.png" />
+    <Resource Include="images\logonew.ico" />
+    <Resource Include="images\magnifier.png" />
+    <Resource Include="images\mie.png" />
+    <Resource Include="images\min.png" />
+    <Resource Include="images\min2.png" />
+    <Resource Include="images\move.png" />
+    <Resource Include="images\nav.png" />
+    <Resource Include="images\newp.jpg" />
+    <Resource Include="images\newp4.jpg" />
+    <Resource Include="images\newp_en.jpg" />
+    <Resource Include="images\ok.jpg" />
+    <Resource Include="images\ok1.png" />
+    <Resource Include="images\open.png" />
+    <Resource Include="images\openfile.png" />
+    <Resource Include="images\openfile2.png" />
+    <Resource Include="images\other.png" />
+    <Resource Include="images\outimage.png" />
+    <Resource Include="images\overlay--close-1.png" />
+    <Resource Include="images\overlay--close.png" />
+    <Resource Include="images\pause.jpg" />
+    <Resource Include="images\pen.png" />
+    <Resource Include="images\pin.png" />
+    <Resource Include="images\pin_1.png" />
+    <Resource Include="images\pin_2.png" />
+    <Resource Include="images\pin_3.png" />
+    <Resource Include="images\pin_4.png" />
+    <Resource Include="images\play.jpg" />
+    <Resource Include="images\pp.png" />
+    <Resource Include="images\pp1.png" />
+    <Resource Include="images\qt_hidd.png" />
+    <Resource Include="images\rule.png" />
+    <Resource Include="images\sc.png" />
+    <Resource Include="images\sca_1.jpg" />
+    <Resource Include="images\set.png" />
+    <Resource Include="images\set_1.png" />
+    <Resource Include="images\shape_rotate_anticlockwise.png" />
+    <Resource Include="images\shape_rotate_anticlockwise_1.png" />
+    <Resource Include="images\shape_rotate_clockwise.png" />
+    <Resource Include="images\shape_rotate_clockwise_1.png" />
+    <Resource Include="images\spin.png" />
+    <Resource Include="images\stop.jpg" />
+    <Resource Include="images\syn.png" />
+    <Resource Include="images\synchronous.png" />
+    <Resource Include="images\tab.png" />
+    <Resource Include="images\tma.png" />
+    <Resource Include="images\tmaadd.png" />
+    <Resource Include="images\tmaclear.png" />
+    <Resource Include="images\tmaline.png" />
+    <Resource Include="images\tmaout.png" />
+    <Resource Include="images\tmasb.png" />
+    <Resource Include="images\tool.png" />
+    <Resource Include="images\toparrow.png" />
+    <Resource Include="images\ty.png" />
+    <Resource Include="images\t_hidd.png" />
+    <Resource Include="images\video.png" />
+    <Resource Include="images\weiyunlogo.jpg" />
+    <Resource Include="images\weiyunlogo.png" />
+    <Resource Include="images\white.jpg" />
+    <Resource Include="images\xe.png" />
+    <Resource Include="images\xianweijing.jpg" />
+    <Resource Include="images\xn.png" />
+    <Resource Include="images\zx.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
