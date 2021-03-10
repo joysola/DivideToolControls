@@ -572,7 +572,11 @@ namespace DivideToolControls.DeepZoomControls
 			}
 			return num;
 		}
-
+		/// <summary>
+		/// scale属性变动调用此方法
+		/// </summary>
+		/// <param name="d"></param>
+		/// <param name="e"></param>
 		private static void OnScaleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			d.CoerceValue(ActualViewboxProperty);
@@ -615,11 +619,13 @@ namespace DivideToolControls.DeepZoomControls
 			ViewboxProperty = DependencyProperty.Register("Viewbox", typeof(Rect), typeof(ZoomableCanvas), new FrameworkPropertyMetadata(Rect.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnViewboxChanged), IsViewboxValid);
 			StretchProperty = DependencyProperty.Register("Stretch", typeof(Stretch), typeof(ZoomableCanvas), new FrameworkPropertyMetadata(Stretch.Uniform, OnStretchChanged), IsStretchValid);
 			StretchDirectionProperty = DependencyProperty.Register("StretchDirection", typeof(StretchDirection), typeof(ZoomableCanvas), new FrameworkPropertyMetadata(StretchDirection.Both, OnStretchDirectionChanged), IsStretchDirectionValid);
+
 			OffsetProperty = DependencyProperty.Register("Offset", typeof(Point), typeof(ZoomableCanvas), new FrameworkPropertyMetadata(new Point(0.0, 0.0), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnOffsetChanged, CoerceOffset), IsOffsetValid);
 			ScaleProperty = DependencyProperty.Register("Scale", typeof(double), typeof(ZoomableCanvas), new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnScaleChanged, CoerceScale), IsScaleValid);
+
 			RealizationLimitProperty = DependencyProperty.Register("RealizationLimit", typeof(int), typeof(ZoomableCanvas), new FrameworkPropertyMetadata(int.MaxValue, OnRealizationLimitChanged), IsRealizationLimitValid);
 			RealizationRateProperty = DependencyProperty.Register("RealizationRate", typeof(int), typeof(ZoomableCanvas), new FrameworkPropertyMetadata(int.MaxValue, OnRealizationRateChanged), IsRealizationRateValid);
-			UIElement.RenderTransformProperty.OverrideMetadata(typeof(ZoomableCanvas), new FrameworkPropertyMetadata(null, CoerceRenderTransform));
+            RenderTransformProperty.OverrideMetadata(typeof(ZoomableCanvas), new FrameworkPropertyMetadata(null, CoerceRenderTransform));
 			try
 			{
 				Canvas.TopProperty.OverrideMetadata(typeof(UIElement), new FrameworkPropertyMetadata(OnPositioningChanged));

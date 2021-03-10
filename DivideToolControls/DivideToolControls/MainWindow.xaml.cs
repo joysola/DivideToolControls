@@ -1,5 +1,6 @@
 ﻿using DivideToolControls.Controls;
 using DivideToolControls.DeepZoom;
+using DivideToolControls.DeepZoomControls;
 using DivideToolControls.DynamicGeometry;
 using DivideToolControls.Helper;
 using DivideToolControls.Model;
@@ -27,7 +28,7 @@ namespace DivideToolControls
     /// </summary>
     public partial class MainWindow : Window
     {
-        DllImageFuc _dllImageFuc = new DllImageFuc();
+        private DllImageFuc _dllImageFuc = new DllImageFuc();
         private MultiScaleImage msi = new MultiScaleImage();
         private DispatcherTimer _timer;
         private string filePath = @"K:\Test\DivideToolControls\DivideToolControls\DivideToolControls\2020-12-04_15_53_56.kfb";
@@ -46,9 +47,7 @@ namespace DivideToolControls
 
             InitOnce();
             StartupOpenFiles(filePath);
-            msi.MouseWheel += Grid_MouseWheel;
-            msi.IsManipulationEnabled = true;
-            msi.ManipulationStarting += msi_ManipulationStarting;
+            
             ClearMemoryThread();
         }
         public void ClearMemoryThread()
@@ -66,10 +65,19 @@ namespace DivideToolControls
                 nav.m_IsDragging = false;
             }
         }
+        /// <summary>
+        /// 初始化
+        /// </summary>
         private void InitOnce()
         {
             Bg.Children.Add(msi);
+            // MultiScaleImage的 ZoomableCanvas的 Scale或Offset属性变化时，通知回调
+            ZoomableCanvas.Refresh += (sender, e) =>
+            {
+                Refresh();
+            };
         }
+
 
         private void msi_ManipulationStarting(object sender, ManipulationStartingEventArgs e)
         {
@@ -80,7 +88,10 @@ namespace DivideToolControls
         {
             //FilePath = filename;
             LoadMsi(filename);
-            msi.Ini += msi_Ini;
+            msi.Ini += Msi_Ini;
+            msi.MouseWheel += Msi_MouseWheel;
+            msi.IsManipulationEnabled = true;
+            msi.ManipulationStarting += msi_ManipulationStarting;
         }
         public void LoadMsi(string filename)
         {
@@ -195,7 +206,7 @@ namespace DivideToolControls
             InfoStruct.DataFilePTR = 0;
             _dllImageFuc.CkInitImageFileFunc(ref InfoStruct, fileName);
         }
-        private void msi_Ini(object sender, RoutedEventArgs e)
+        private void Msi_Ini(object sender, RoutedEventArgs e)
         {
             string filePath = this.filePath;
             //nav._Mainpage = this;
@@ -292,7 +303,7 @@ namespace DivideToolControls
             //}
         }
 
-        private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void Msi_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             int num = e.Timestamp - ZoomModel.m_prevTimeStap;
             if (Setting.isCtrl == 0 || x3dSlider.Visibility == Visibility.Collapsed)
@@ -300,14 +311,14 @@ namespace DivideToolControls
                 Setting.Opacity = 1;
                 ZoomModel.IsDw = false;
                 double num2 = 1.0;
-                double num3 = Setting.MaxMagValue * (double)ZoomModel.SlideZoom * Setting.MargPara;
-                num2 = ZoomHelper.Instance.CalcSpeed(num);
+                double num3 = Setting.MaxMagValue * ZoomModel.SlideZoom * Setting.MargPara;
+                num2 = ZoomHelper.CalcSpeed(num);
                 ZoomModel.m_prevTimeStap = e.Timestamp;
                 double curscale = ZoomModel.Curscale;
                 if (curscale == ZoomModel.m_prevNewzoom || !(ZoomModel.m_prevNewzoom > 1E-08))
                 {
-                    double magAdjValueByCurMag = ZoomHelper.Instance.GetMagAdjValueByCurMag(ZoomModel.Curscale);
-                    curscale = ((e.Delta <= 0) ? (curscale - magAdjValueByCurMag * num2) : (curscale + magAdjValueByCurMag * num2));
+                    double magAdjValueByCurMag = ZoomHelper.GetMagAdjValueByCurMag(ZoomModel.Curscale);
+                    curscale = e.Delta <= 0 ? (curscale - magAdjValueByCurMag * num2) : (curscale + magAdjValueByCurMag * num2);
                     if (curscale < ZoomModel.fitratio)
                     {
                         curscale = ZoomModel.fitratio;
@@ -323,12 +334,12 @@ namespace DivideToolControls
                         {
                             if ((MainWindow)item.Value != this)
                             {
-                                ZoomHelper.Instance.ZoomRatio(curscale, position.X, position.Y, LayoutBody, msi);
+                                ZoomHelper.ZoomRatio(curscale, position.X, position.Y, LayoutBody, msi, Refresh);
                             }
                         }
                     }
-                    ZoomHelper.Instance.ZoomRatio(curscale, position.X, position.Y, LayoutBody, msi);
-                    Refresh();
+                    ZoomHelper.ZoomRatio(curscale, position.X, position.Y, LayoutBody, msi, Refresh);
+                    //Refresh();
                     ZoomModel.m_prevNewzoom = curscale;
                 }
             }
@@ -384,14 +395,14 @@ namespace DivideToolControls
             {
                 lbl_Scale.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
             }
-            ZoomHelper.Instance.ReDraw();
+            ZoomHelper.ReDraw(); // 画Annotation
             SRuler.UpdateRule(); // 刻度尺
             if (!_timer.IsEnabled)
             {
                 _timer.IsEnabled = true;
             }
             ctccanvasboard.Children.Clear();
-            if (Math.Round(msi.ZoomableCanvas.Scale * (double)ZoomModel.SlideZoom, 2) != (double)ZoomModel.SlideZoom /*|| CtcWind == null*/)
+            if (Math.Round(msi.ZoomableCanvas.Scale * ZoomModel.SlideZoom, 2) != ZoomModel.SlideZoom /*|| CtcWind == null*/)
             {
                 return;
             }

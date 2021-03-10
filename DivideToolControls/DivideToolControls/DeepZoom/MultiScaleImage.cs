@@ -108,7 +108,11 @@ namespace DivideToolControls.DeepZoom
 				}
 			}
 		}
-
+		/// <summary>
+		/// 在应用样式时(OnApplyTemplate)调用此方法
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ZoomableCanvasLoaded(object sender, RoutedEventArgs e)
 		{
 			_zoomableCanvas = (sender as ZoomableCanvas);
@@ -185,7 +189,12 @@ namespace DivideToolControls.DeepZoom
 			SetAspectRatio(_spatialSource.Extent.Width / _spatialSource.Extent.Height);
 			_spatialSource.InvalidateSource();
 		}
-
+		/// <summary>
+		/// 改变scale和offset
+		/// </summary>
+		/// <param name="relativeScale"></param>
+		/// <param name="center"></param>
+		/// <param name="animate"></param>
 		public void ScaleCanvas(double relativeScale, Point center, bool animate = false)
 		{
 			double scale = _zoomableCanvas.Scale;
@@ -232,10 +241,12 @@ namespace DivideToolControls.DeepZoom
 				}
 				TimeSpan timeSpan = TimeSpan.FromMilliseconds(num2);
 				CubicEase easingFunction = new CubicEase();
+				// scale属性变动
 				_zoomableCanvas.BeginAnimation(ZoomableCanvas.ScaleProperty, new DoubleAnimation(num, timeSpan)
 				{
 					EasingFunction = easingFunction
 				}, HandoffBehavior.Compose);
+				// offset属性变动
 				_zoomableCanvas.BeginAnimation(ZoomableCanvas.OffsetProperty, new PointAnimation(point, timeSpan)
 				{
 					EasingFunction = easingFunction

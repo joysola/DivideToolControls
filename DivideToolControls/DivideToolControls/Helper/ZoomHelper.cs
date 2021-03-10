@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -14,8 +15,8 @@ namespace DivideToolControls.Helper
 {
     public class ZoomHelper
     {
-        public static ZoomHelper Instance { get; } = new ZoomHelper();
-        private double[] m_magV = new double[12]
+        //public static ZoomHelper Instance { get; } = new ZoomHelper();
+        private static double[] m_magV = new double[12]
         {
         320.0,
         128.0,
@@ -31,7 +32,7 @@ namespace DivideToolControls.Helper
         0.0
         };
 
-        private double[] m_adjV = new double[12]
+        private static double[] m_adjV = new double[12]
         {
         10.0,
         5.0,
@@ -47,7 +48,7 @@ namespace DivideToolControls.Helper
         0.2
         };
 
-        public double GetMagAdjValueByCurMag(double curMagV)
+        public static double GetMagAdjValueByCurMag(double curMagV)
         {
             double result = 0.0;
             for (int i = 0; i < 11; i++)
@@ -65,7 +66,7 @@ namespace DivideToolControls.Helper
             return result;
         }
 
-        private double CalcFixValueY(double x1, double x2, double y1, double y2, double x)
+        private static double CalcFixValueY(double x1, double x2, double y1, double y2, double x)
         {
             double num = x2 - x1;
             double num2 = x2 - x;
@@ -74,7 +75,7 @@ namespace DivideToolControls.Helper
             return y2 - num4;
         }
 
-        public double CalcSpeed(int timeDelta)
+        public static double CalcSpeed(int timeDelta)
         {
             double num = 1.0;
             double num2 = 3.0;
@@ -103,7 +104,7 @@ namespace DivideToolControls.Helper
             return num;
         }
 
-        public void ZoomRatio(double zoom_ratio, double x, double y, Grid LayoutBody, MultiScaleImage msi)
+        public static void ZoomRatio(double zoom_ratio, double x, double y, Grid LayoutBody, MultiScaleImage msi)
         {
             double num = 0.0;
             if (ZoomModel.SlideZoom == 40)
@@ -118,19 +119,46 @@ namespace DivideToolControls.Helper
             {
                 num = 1.0;
             }
-            System.Windows.Point point = new System.Windows.Point(x, y);
-            System.Windows.Point center = new System.Windows.Point(0.0, 0.0);
-            point = new System.Windows.Point(point.X - LayoutBody.ActualWidth / 2.0, point.Y - LayoutBody.ActualHeight / 2.0);
-            System.Windows.Point point2 = KCommon.PointRotate(center, point, ZoomModel.Rotate);
+            Point point = new Point(x, y);
+            Point center = new Point(0.0, 0.0);
+            point = new Point(point.X - LayoutBody.ActualWidth / 2.0, point.Y - LayoutBody.ActualHeight / 2.0);
+            Point point2 = KCommon.PointRotate(center, point, ZoomModel.Rotate);
             double x2 = point2.X + msi.ActualWidth / 2.0;
             double y2 = point2.Y + msi.ActualHeight / 2.0;
-            System.Windows.Point elementPoint = new System.Windows.Point(x2, y2);
-            System.Windows.Point point3 = msi.ElementToLogicalPoint(elementPoint);
+            Point elementPoint = new Point(x2, y2);
+            Point point3 = msi.ElementToLogicalPoint(elementPoint);
             msi.ZoomAboutLogicalPoint(zoom_ratio / ZoomModel.Curscale, point3.X, point3.Y);
             ZoomModel.Curscale = zoom_ratio;
             //Refresh();
         }
-        public void ReDraw()
+        public static void ZoomRatio(double zoom_ratio, double x, double y, Grid LayoutBody, MultiScaleImage msi, Action refreshAction)
+        {
+            double num = 0.0;
+            if (ZoomModel.SlideZoom == 40)
+            {
+                num = Setting.Calibration40;
+            }
+            else if (ZoomModel.SlideZoom == 20)
+            {
+                num = Setting.Calibration20;
+            }
+            if (num == 0.0)
+            {
+                num = 1.0;
+            }
+            Point point = new Point(x, y);
+            Point center = new Point(0.0, 0.0);
+            point = new Point(point.X - LayoutBody.ActualWidth / 2.0, point.Y - LayoutBody.ActualHeight / 2.0);
+            Point point2 = KCommon.PointRotate(center, point, ZoomModel.Rotate);
+            double x2 = point2.X + msi.ActualWidth / 2.0;
+            double y2 = point2.Y + msi.ActualHeight / 2.0;
+            Point elementPoint = new Point(x2, y2);
+            Point point3 = msi.ElementToLogicalPoint(elementPoint);
+            msi.ZoomAboutLogicalPoint(zoom_ratio / ZoomModel.Curscale, point3.X, point3.Y);
+            ZoomModel.Curscale = zoom_ratio;
+            refreshAction?.Invoke();
+        }
+        public static void ReDraw()
         {
             foreach (AnnotationBase item in ZoomModel.objectlist)
             {

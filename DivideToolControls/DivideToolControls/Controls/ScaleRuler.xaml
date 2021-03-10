@@ -6,25 +6,39 @@
              xmlns:local="clr-namespace:DivideToolControls.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="300">
+    <UserControl.Resources>
+        <!--Line样式-->
+        <Style TargetType="Line">
+            <Setter Property="Stroke" Value="#FF000000"/>
+            <Setter Property="StrokeThickness" Value="3.5"/>
+        </Style>
+        <!--Label样式-->
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="#FF000000"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+    </UserControl.Resources>
     <Grid>
+        
         <Canvas Name="RuleCanvas" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="40" Margin="10,20,0,0" ZIndex="4">
             <UIElement.Effect>
-                <DropShadowEffect BlurRadius="5" Direction="0" Opacity="0.7" ShadowDepth="3" />
+                <DropShadowEffect BlurRadius="5" Direction="45" Opacity="0.6" ShadowDepth="2.5" />
             </UIElement.Effect>
             <Thumb Name="RuleThumb" Width="20" Height="20" Canvas.Left="-10" Canvas.Top="-20" Panel.ZIndex="44" ToolTip="移动" Visibility="Collapsed" DragDelta="RuleThumb_DragDelta" />
-            <Line Name="RLine_L" X1="0" Y1="0" X2="200" Y2="0" Stroke="#FF000000" StrokeThickness="4" Panel.ZIndex="3" />
-            <Line Name="RLine_0" X1="0" Y1="-2" X2="0" Y2="10" Stroke="#FF000000" StrokeThickness="4" />
-            <Line Name="RLine_1" X1="40" Y1="-2" X2="40" Y2="10" Stroke="#FF000000" StrokeThickness="4" />
-            <Line Name="RLine_2" X1="80" Y1="-2" X2="80" Y2="10" Stroke="#FF000000" StrokeThickness="4" />
-            <Line Name="RLine_3" X1="120" Y1="-2" X2="120" Y2="10" Stroke="#FF000000" StrokeThickness="4" />
-            <Line Name="RLine_4" X1="160" Y1="-2" X2="160" Y2="10" Stroke="#FF000000" StrokeThickness="4" />
-            <Line Name="RLine_5" X1="200" Y1="-2" X2="200" Y2="10" Stroke="#FF000000" StrokeThickness="4" />
-            <Label Name="Rtxt_0" Content="0" Foreground="#FF000000" FontWeight="Black" FontSize="16" Margin="-10,10,0,0" />
-            <Label Name="Rtxt_1" Content="10" Foreground="#FF000000" FontWeight="Black" FontSize="16" Margin="25,10,0,0" />
-            <Label Name="Rtxt_2" Content="20" Foreground="#FF000000" FontWeight="Black" FontSize="16" Margin="65,10,0,0" />
-            <Label Name="Rtxt_3" Content="30" Foreground="#FF000000" FontWeight="Black" FontSize="16" Margin="105,10,0,0" />
-            <Label Name="Rtxt_4" Content="40" Foreground="#FF000000" FontWeight="Black" FontSize="16" Margin="145,10,0,0" />
-            <Label Name="Rtxt_5" Content="50μm" Foreground="#FF000000" FontWeight="Black" FontSize="16" Margin="185,10,0,0" />
+            <Line Name="RulerLine_L" X1="0" Y1="0" X2="200" Y2="0"   Panel.ZIndex="3" />
+            <Line Name="ScaleLine_0" X1="0" Y1="-2" X2="0" Y2="15"  />
+            <Line Name="ScaleRLine_1" X1="40" Y1="-2" X2="40" Y2="10"  />
+            <Line Name="ScaleRLine_2" X1="80" Y1="-2" X2="80" Y2="10"  />
+            <Line Name="ScaleRLine_3" X1="120" Y1="-2" X2="120" Y2="10"  />
+            <Line Name="ScaleRLine_4" X1="160" Y1="-2" X2="160" Y2="10" />
+            <Line Name="ScaleRLine_5" X1="200" Y1="-2" X2="200" Y2="15" />
+            <Label Name="ScaleLabel_0" Content="0"  Margin="-10,10,0,0" />
+            <Label Name="ScaleLabel_1" Content="10" Margin="25,10,0,0" />
+            <Label Name="ScaleLabel_2" Content="20" Margin="65,10,0,0" />
+            <Label Name="ScaleLabel_3" Content="30" Margin="105,10,0,0" />
+            <Label Name="ScaleLabel_4" Content="40" Margin="145,10,0,0" />
+            <Label Name="ScaleLabel_5" Content="50μm" Margin="185,10,0,0" />
         </Canvas>
     </Grid>
 </UserControl>
