@@ -18,38 +18,19 @@ namespace DivideToolControls.AnnotationControls
 {
     public class AnnoLine : AnnoBase
     {
-        private Line m_line;
-
-        private Thumb m_ThumbEnd;
-
-        private Thumb m_ThumbStart;
-
-        private Thumb m_ThumbMove;
-
-        private Thumb ThumbEnd
-        {
-            get => m_ThumbEnd;
-            set => m_ThumbEnd = value;
-        }
-
-        private Thumb ThumbStart
-        {
-            get => m_ThumbStart;
-            set => m_ThumbStart = value;
-        }
-
-        private Thumb ThumbMove
-        {
-            get => m_ThumbMove;
-            set => m_ThumbMove = value;
-        }
-
-        private Line MLine
-        {
-            get => m_line;
-            set => m_line = value;
-        }
-
+        private Line ALine { get; set; }
+        private Thumb ThumbEnd { get; set; }
+        private Thumb ThumbStart { get; set; }
+        private Thumb ThumbMove { get; set; }
+        /// <summary>
+        /// 画标记构造器
+        /// </summary>
+        /// <param name="alc"></param>
+        /// <param name="canvasboard"></param>
+        /// <param name="msi"></param>
+        /// <param name="objectlist"></param>
+        /// <param name="SlideZoom"></param>
+        /// <param name="Calibration"></param>
         public AnnoLine(AnnoListCtls alc, Canvas canvasboard, MultiScaleImage msi, List<AnnoBase> objectlist, int SlideZoom, double Calibration)
         {
             SetPara(alc, canvasboard, msi, objectlist, SlideZoom, Calibration);
@@ -57,14 +38,17 @@ namespace DivideToolControls.AnnotationControls
             base.AnnotationType = AnnotationType.Line;
             base.ControlName = base.AnnotationType + DateTime.Now.ToString("yyyyMMddHHmmss");
         }
-
+        /// <summary>
+        /// 展示标记构造器
+        /// </summary>
+        /// <param name="ab"></param>
         public AnnoLine(AnnoBase ab)
         {
             base.AnnotationType = AnnotationType.Line;
             base.ControlName = ab.ControlName;
             base.AnnotationDescription = ab.AnnotationDescription;
-            m_line = new Line();
-            m_line.Name = ab.ControlName;
+            ALine = new Line();
+            ALine.Name = ab.ControlName;
             base.Calibration = ab.Calibration;
             base.SlideZoom = ab.SlideZoom;
             base.CurrentStart = ab.CurrentStart;
@@ -84,19 +68,19 @@ namespace DivideToolControls.AnnotationControls
             base.objectlist = ab.objectlist;
             base.AnnoControl = ab.AnnoControl;
             base.msi = ab.msi;
-            m_line.X1 = MsiToCanvas(ab.CurrentStart).X;
-            m_line.Y1 = MsiToCanvas(ab.CurrentStart).Y;
-            m_line.X2 = MsiToCanvas(ab.CurrentEnd).X;
-            m_line.Y2 = MsiToCanvas(ab.CurrentEnd).Y;
-            m_line.StrokeThickness = ab.Size;
-            m_line.Stroke = ab.BorderBrush;
-            M_FiguresCanvas.Children.Add(m_line);
+            ALine.X1 = MsiToCanvas(ab.CurrentStart).X;
+            ALine.Y1 = MsiToCanvas(ab.CurrentStart).Y;
+            ALine.X2 = MsiToCanvas(ab.CurrentEnd).X;
+            ALine.Y2 = MsiToCanvas(ab.CurrentEnd).Y;
+            ALine.StrokeThickness = ab.Size;
+            ALine.Stroke = ab.BorderBrush;
+            M_FiguresCanvas.Children.Add(ALine);
             base.objectlist.Insert(0, this);
             CreateMTextBlock();
             CreateThumb();
             UpdateCB();
-            m_line.MouseLeftButtonDown += Select_MouseDown;
-            m_line.MouseEnter += GotFocus;
+            ALine.MouseLeftButtonDown += Select_MouseDown;
+            ALine.MouseEnter += GotFocus;
             base.UpadteTextBlock();
             IsActive(Visibility.Collapsed);
             base.AnnoControl.CB.SelectedIndex = -1;
@@ -111,15 +95,15 @@ namespace DivideToolControls.AnnotationControls
         {
             if (!base.isdraw)
             {
-                m_line = new Line();
-                m_line.Name = base.ControlName;
+                ALine = new Line();
+                ALine.Name = base.ControlName;
                 Point position = e.GetPosition(M_FiguresCanvas);
-                m_line.X1 = position.X;
-                m_line.Y1 = position.Y;
-                m_line.X2 = position.X;
-                m_line.Y2 = position.Y;
-                m_line.StrokeThickness = base.Size;
-                m_line.Stroke = base.BorderBrush;
+                ALine.X1 = position.X;
+                ALine.Y1 = position.Y;
+                ALine.X2 = position.X;
+                ALine.Y2 = position.Y;
+                ALine.StrokeThickness = base.Size;
+                ALine.Stroke = base.BorderBrush;
                 base.msi.MouseMove += MouseMove;
                 Application.Current.MainWindow.MouseLeave += MouseUp;
                 Application.Current.MainWindow.MouseUp += MouseUp;
@@ -127,7 +111,7 @@ namespace DivideToolControls.AnnotationControls
                 base.OriginEnd = position;
                 base.CurrentStart = CanvasToMsi(position);
                 base.CurrentEnd = base.CurrentStart;
-                M_FiguresCanvas.Children.Add(m_line);
+                M_FiguresCanvas.Children.Add(ALine);
                 base.AnnotationName = Setting.Line + (base.objectlist.Count + 1);
                 base.AnnotationDescription = "";
                 base.objectlist.Insert(0, this);
@@ -139,10 +123,10 @@ namespace DivideToolControls.AnnotationControls
         private void MouseMove(object sender, MouseEventArgs e)
         {
             Point position = e.GetPosition(base.msi);
-            m_line.X1 = base.OriginStart.X;
-            m_line.Y1 = base.OriginStart.Y;
-            m_line.X2 = position.X;
-            m_line.Y2 = position.Y;
+            ALine.X1 = base.OriginStart.X;
+            ALine.Y1 = base.OriginStart.Y;
+            ALine.X2 = position.X;
+            ALine.Y2 = position.Y;
             base.OriginEnd = position;
             base.CurrentEnd = CanvasToMsi(position);
             base.TextBlock_info = CalcMeasureInfo();
@@ -154,9 +138,9 @@ namespace DivideToolControls.AnnotationControls
         {
             base.isdraw = false;
             base.isFinish = true;
-            m_line.MouseLeftButtonDown += Select_MouseDown;
+            ALine.MouseLeftButtonDown += Select_MouseDown;
             new Button();
-            m_line.MouseEnter += GotFocus;
+            ALine.MouseEnter += GotFocus;
             CreateMTextBlock();
             CreateThumb();
             Application.Current.MainWindow.MouseLeave -= MouseUp;
@@ -211,11 +195,11 @@ namespace DivideToolControls.AnnotationControls
 
         public override void DeleteItem()
         {
-            M_FiguresCanvas.Children.Remove(m_line);
+            M_FiguresCanvas.Children.Remove(ALine);
             M_FiguresCanvas.Children.Remove(base.MTextBlock);
-            M_FiguresCanvas.Children.Remove(m_ThumbStart);
+            M_FiguresCanvas.Children.Remove(ThumbStart);
             M_FiguresCanvas.Children.Remove(ThumbMove);
-            M_FiguresCanvas.Children.Remove(m_ThumbEnd);
+            M_FiguresCanvas.Children.Remove(ThumbEnd);
             base.objectlist.Remove(this);
         }
 
@@ -231,35 +215,35 @@ namespace DivideToolControls.AnnotationControls
             base.MTextBlock.MaxWidth = 150.0;
             base.MTextBlock.TextWrapping = TextWrapping.Wrap;
             base.MTextBlock.Text = CalcMeasureInfo();
-            base.MTextBlock.SetValue(Canvas.LeftProperty, m_line.X2);
-            base.MTextBlock.SetValue(Canvas.TopProperty, m_line.Y2);
+            base.MTextBlock.SetValue(Canvas.LeftProperty, ALine.X2);
+            base.MTextBlock.SetValue(Canvas.TopProperty, ALine.Y2);
             M_FiguresCanvas.Children.Add(base.MTextBlock);
         }
 
         public override void CreateThumb()
         {
-            if (m_ThumbEnd == null)
+            if (ThumbEnd == null)
             {
-                m_ThumbEnd = new Thumb();
-                m_ThumbStart = new Thumb();
+                ThumbEnd = new Thumb();
+                ThumbStart = new Thumb();
                 ThumbMove = new Thumb();
-                m_ThumbEnd.Height = Setting.Thumb_w;
-                m_ThumbEnd.Width = Setting.Thumb_w;
-                m_ThumbStart.Height = Setting.Thumb_w;
-                m_ThumbStart.Width = Setting.Thumb_w;
+                ThumbEnd.Height = Setting.Thumb_w;
+                ThumbEnd.Width = Setting.Thumb_w;
+                ThumbStart.Height = Setting.Thumb_w;
+                ThumbStart.Width = Setting.Thumb_w;
                 ThumbMove.Height = Setting.Thumb_c;
                 ThumbMove.Width = Setting.Thumb_c;
-                m_ThumbStart.SetValue(Canvas.LeftProperty, m_line.X1 - m_ThumbStart.Width / 2.0);
-                m_ThumbStart.SetValue(Canvas.TopProperty, m_line.Y1 - m_ThumbStart.Height / 2.0);
-                m_ThumbEnd.SetValue(Canvas.LeftProperty, m_line.X2 - m_ThumbEnd.Width / 2.0);
-                m_ThumbEnd.SetValue(Canvas.TopProperty, m_line.Y2 - m_ThumbEnd.Height / 2.0);
-                ThumbMove.SetValue(Canvas.LeftProperty, (m_line.X1 + m_line.X2) / 2.0 - ThumbMove.Width / 2.0);
-                ThumbMove.SetValue(Canvas.TopProperty, (m_line.Y1 + m_line.Y2) / 2.0 - ThumbMove.Height / 2.0);
-                M_FiguresCanvas.Children.Add(m_ThumbStart);
+                ThumbStart.SetValue(Canvas.LeftProperty, ALine.X1 - ThumbStart.Width / 2.0);
+                ThumbStart.SetValue(Canvas.TopProperty, ALine.Y1 - ThumbStart.Height / 2.0);
+                ThumbEnd.SetValue(Canvas.LeftProperty, ALine.X2 - ThumbEnd.Width / 2.0);
+                ThumbEnd.SetValue(Canvas.TopProperty, ALine.Y2 - ThumbEnd.Height / 2.0);
+                ThumbMove.SetValue(Canvas.LeftProperty, (ALine.X1 + ALine.X2) / 2.0 - ThumbMove.Width / 2.0);
+                ThumbMove.SetValue(Canvas.TopProperty, (ALine.Y1 + ALine.Y2) / 2.0 - ThumbMove.Height / 2.0);
+                M_FiguresCanvas.Children.Add(ThumbStart);
                 M_FiguresCanvas.Children.Add(ThumbMove);
-                M_FiguresCanvas.Children.Add(m_ThumbEnd);
-                m_ThumbEnd.DragDelta += ThumbEnd_DragDelta;
-                m_ThumbStart.DragDelta += ThumbStart_DragDelta;
+                M_FiguresCanvas.Children.Add(ThumbEnd);
+                ThumbEnd.DragDelta += ThumbEnd_DragDelta;
+                ThumbStart.DragDelta += ThumbStart_DragDelta;
                 ThumbMove.DragDelta += ThumbMove_DragDelta;
             }
         }
@@ -298,8 +282,8 @@ namespace DivideToolControls.AnnotationControls
 
         private string GetLength()
         {
-            double num = Math.Abs(m_line.X1 - m_line.X2);
-            double num2 = Math.Abs(m_line.Y1 - m_line.Y2);
+            double num = Math.Abs(ALine.X1 - ALine.X2);
+            double num2 = Math.Abs(ALine.Y1 - ALine.Y2);
             double value = Math.Sqrt(num * num + num2 * num2) * base.Calibration / base.msi.ZoomableCanvas.Scale;
             return Math.Round(value, 2).ToString();
         }
@@ -320,21 +304,21 @@ namespace DivideToolControls.AnnotationControls
                 {
                     base.MTextBlock.Visibility = Visibility.Collapsed;
                 }
-                m_line.StrokeThickness = base.Size;
-                m_line.Stroke = base.BorderBrush;
-                m_line.X1 = MsiToCanvas(base.CurrentStart).X;
-                m_line.Y1 = MsiToCanvas(base.CurrentStart).Y;
-                m_line.X2 = MsiToCanvas(base.CurrentEnd).X;
-                m_line.Y2 = MsiToCanvas(base.CurrentEnd).Y;
-                m_ThumbStart.SetValue(Canvas.LeftProperty, m_line.X1 - m_ThumbStart.Width / 2.0);
-                m_ThumbStart.SetValue(Canvas.TopProperty, m_line.Y1 - m_ThumbStart.Height / 2.0);
-                m_ThumbEnd.SetValue(Canvas.LeftProperty, m_line.X2 - m_ThumbEnd.Width / 2.0);
-                m_ThumbEnd.SetValue(Canvas.TopProperty, m_line.Y2 - m_ThumbEnd.Height / 2.0);
-                ThumbMove.SetValue(Canvas.LeftProperty, (m_line.X1 + m_line.X2) / 2.0 - ThumbMove.Width / 2.0);
-                ThumbMove.SetValue(Canvas.TopProperty, (m_line.Y1 + m_line.Y2) / 2.0 - ThumbMove.Height / 2.0);
-                Canvas.SetLeft(base.MTextBlock, (m_line.X1 + m_line.X2) / 2.0);
-                Canvas.SetTop(base.MTextBlock, (m_line.Y1 + m_line.Y2) / 2.0);
-                m_line.Visibility = base.isHidden;
+                ALine.StrokeThickness = base.Size;
+                ALine.Stroke = base.BorderBrush;
+                ALine.X1 = MsiToCanvas(base.CurrentStart).X;
+                ALine.Y1 = MsiToCanvas(base.CurrentStart).Y;
+                ALine.X2 = MsiToCanvas(base.CurrentEnd).X;
+                ALine.Y2 = MsiToCanvas(base.CurrentEnd).Y;
+                ThumbStart.SetValue(Canvas.LeftProperty, ALine.X1 - ThumbStart.Width / 2.0);
+                ThumbStart.SetValue(Canvas.TopProperty, ALine.Y1 - ThumbStart.Height / 2.0);
+                ThumbEnd.SetValue(Canvas.LeftProperty, ALine.X2 - ThumbEnd.Width / 2.0);
+                ThumbEnd.SetValue(Canvas.TopProperty, ALine.Y2 - ThumbEnd.Height / 2.0);
+                ThumbMove.SetValue(Canvas.LeftProperty, (ALine.X1 + ALine.X2) / 2.0 - ThumbMove.Width / 2.0);
+                ThumbMove.SetValue(Canvas.TopProperty, (ALine.Y1 + ALine.Y2) / 2.0 - ThumbMove.Height / 2.0);
+                Canvas.SetLeft(base.MTextBlock, (ALine.X1 + ALine.X2) / 2.0);
+                Canvas.SetTop(base.MTextBlock, (ALine.Y1 + ALine.Y2) / 2.0);
+                ALine.Visibility = base.isHidden;
                 base.MTextBlock.Visibility = base.isHidden;
                 base.MTextBlock.Text = CalcMeasureInfo();
             }

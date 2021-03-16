@@ -6,9 +6,16 @@
         xmlns:local="clr-namespace:DivideToolControls"
         xmlns:ctl="clr-namespace:DivideToolControls.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" >
+        Title="MainWindow" Height="850" Width="800" >
     <Grid>
-        <Grid x:Name="LayoutBody">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <ctl:TestAnnoBtnList/>
+        </StackPanel>
+        <Grid x:Name="LayoutBody" Grid.Row="1">
             <Grid Name="OutBg" Background="#FFFFFFFF">
                 <Grid Name="Bg" Background="#FFFFFFFF">
                     <Canvas Name="canvasboard" ZIndex="3" />

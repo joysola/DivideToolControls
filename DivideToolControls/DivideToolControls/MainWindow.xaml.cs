@@ -39,7 +39,7 @@ namespace DivideToolControls
         private int MaxLevel;
         private string LevelFilePath;
         private int TileSize;
-
+        private Point lastMousePos;
         //private CtcList CtcWind;
         public MainWindow()
         {
@@ -70,6 +70,7 @@ namespace DivideToolControls
         /// </summary>
         private void InitOnce()
         {
+            ZoomModel.Canvasboard = this.canvasboard;
             Bg.Children.Add(msi);
             // MultiScaleImage的 ZoomableCanvas的 Scale或Offset属性变化时，通知回调
             ZoomableCanvas.Refresh += (sender, e) =>
@@ -235,7 +236,7 @@ namespace DivideToolControls
             //_myRectZoom = new myRectZoom(alc, RectCanvas, msi, objectlist, SlideZoom, Calibration);
             //_myRectZoom.RightZoom += m_RightZoom;
             //ArcMenu();
-            ZoomModel.fitratio = (double)ZoomModel.SlideZoom * msi.ZoomableCanvas.Scale;
+            ZoomModel.Fitratio = (double)ZoomModel.SlideZoom * msi.ZoomableCanvas.Scale;
             //fitx = msi.ZoomableCanvas.Offset.X;
             //fity = msi.ZoomableCanvas.Offset.Y;
             Refresh();
@@ -305,7 +306,7 @@ namespace DivideToolControls
 
         private void Msi_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            int num = e.Timestamp - ZoomModel.m_prevTimeStap;
+            int num = e.Timestamp - ZoomModel.PrevTimeStap;
             if (Setting.isCtrl == 0 || x3dSlider.Visibility == Visibility.Collapsed)
             {
                 Setting.Opacity = 1;
@@ -313,15 +314,15 @@ namespace DivideToolControls
                 double num2 = 1.0;
                 double num3 = Setting.MaxMagValue * ZoomModel.SlideZoom * Setting.MargPara;
                 num2 = ZoomHelper.CalcSpeed(num);
-                ZoomModel.m_prevTimeStap = e.Timestamp;
+                ZoomModel.PrevTimeStap = e.Timestamp;
                 double curscale = ZoomModel.Curscale;
-                if (curscale == ZoomModel.m_prevNewzoom || !(ZoomModel.m_prevNewzoom > 1E-08))
+                if (curscale == ZoomModel.PrevNewzoom || !(ZoomModel.PrevNewzoom > 1E-08))
                 {
                     double magAdjValueByCurMag = ZoomHelper.GetMagAdjValueByCurMag(ZoomModel.Curscale);
                     curscale = e.Delta <= 0 ? (curscale - magAdjValueByCurMag * num2) : (curscale + magAdjValueByCurMag * num2);
-                    if (curscale < ZoomModel.fitratio)
+                    if (curscale < ZoomModel.Fitratio)
                     {
-                        curscale = ZoomModel.fitratio;
+                        curscale = ZoomModel.Fitratio;
                     }
                     if (curscale > num3)
                     {
@@ -340,7 +341,7 @@ namespace DivideToolControls
                     }
                     ZoomHelper.ZoomRatio(curscale, position.X, position.Y, LayoutBody, msi, Refresh);
                     //Refresh();
-                    ZoomModel.m_prevNewzoom = curscale;
+                    ZoomModel.PrevNewzoom = curscale;
                 }
             }
             //else if (num > 300)
@@ -386,7 +387,7 @@ namespace DivideToolControls
                 num3 = ZoomModel.SlideZoom * (int)Setting.MaxMagValue;
             }
             lbl_Scale.Content = Math.Round(num3, 2) + "X";
-            ZoomModel.m_prevNewzoom = msi.ZoomableCanvas.Scale * (double)ZoomModel.SlideZoom;
+            ZoomModel.PrevNewzoom = msi.ZoomableCanvas.Scale * (double)ZoomModel.SlideZoom;
             if (num2 > (double)ZoomModel.SlideZoom)
             {
                 lbl_Scale.Foreground = new SolidColorBrush(Color.FromRgb(byte.MaxValue, 0, 0));
@@ -459,5 +460,6 @@ namespace DivideToolControls
             //    new myCtcRectangle(annotationBase);
             //}
         }
+
     }
 }

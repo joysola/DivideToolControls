@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DivideToolControls.Helper
 {
-	internal class DllImageFuc
+	public class DllImageFuc
 	{
 		/// <summary>
 		/// 获取文件的头部信息

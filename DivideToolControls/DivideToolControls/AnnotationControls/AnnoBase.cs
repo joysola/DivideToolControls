@@ -87,7 +87,9 @@ namespace DivideToolControls.AnnotationControls
         public Point OriginEnd { get; set; }
 
         public string PinType { get; set; }
-
+        /// <summary>
+        /// 是否正在绘制
+        /// </summary>
         public bool isdraw { get; set; }
 
         public double Size { get; set; }

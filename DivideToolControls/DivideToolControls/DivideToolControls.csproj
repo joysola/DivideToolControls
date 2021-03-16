@@ -35,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>..\Lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlOperator">
+      <HintPath>..\Lib\SqlOperator.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -51,12 +57,34 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\Lib\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AnnotationControls\AnnoDIYCtcRect.cs" />
+    <Compile Include="AnnotationControls\AnnoPin.cs" />
+    <Compile Include="AnnotationControls\AnnoTmaRect.cs" />
+    <Compile Include="Controls\CtcList.xaml.cs">
+      <DependentUpon>CtcList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WinCtls\AnnoListWind.xaml.cs">
+      <DependentUpon>AnnoListWind.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WinCtls\AnnoWind.xaml.cs">
+      <DependentUpon>AnnoWind.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WinCtls\CtcViewer.xaml.cs">
+      <DependentUpon>CtcViewer.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Controls\CtcList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\MessageWind.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -73,10 +101,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\TestAnnoBtnList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="AnnotationControls\AnnoLine.cs" />
+    <Compile Include="AnnotationControls\AnnoBase.cs" />
+    <Compile Include="AnnotationControls\AnnoListCtls.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -86,6 +121,9 @@
     </Compile>
     <Compile Include="Controls\Navmap.xaml.cs">
       <DependentUpon>Navmap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TestAnnoBtnList.xaml.cs">
+      <DependentUpon>TestAnnoBtnList.xaml</DependentUpon>
     </Compile>
     <Compile Include="DeepZoomControls\VirtualPanel.cs" />
     <Compile Include="DeepZoom\DeepZoomImageTileSource.cs" />
@@ -119,6 +157,7 @@
     <Compile Include="Helper\IMAGE_INFO_STRUCT.cs" />
     <Compile Include="Helper\KCommon.cs" />
     <Compile Include="Helper\MemoryHelper.cs" />
+    <Compile Include="Helper\MulScanImgHelper.cs" />
     <Compile Include="Helper\ZoomHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -129,6 +168,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\MultiScaleImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WinCtls\AnnoListWind.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WinCtls\AnnoWind.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WinCtls\CtcViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -289,5 +340,6 @@
     <Resource Include="images\xn.png" />
     <Resource Include="images\zx.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
