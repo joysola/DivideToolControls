@@ -20,9 +20,9 @@
         </Grid.RowDefinitions>
         <Rectangle Grid.RowSpan="21" Grid.ColumnSpan="3" Style="{StaticResource DialogBackgroundRectangleStyle}" />
         <Border Name="TitleArea" Grid.Row="0" Grid.ColumnSpan="3" Style="{StaticResource DialogTitleBorderStyle}" Margin="16,16,16,0" VerticalAlignment="Top">
-            <Label Style="{StaticResource DialogTitleLabelStyle}" Margin="4" Content="{Binding Path=LanguageResource[AnnotationsManagement], Source={StaticResource Lang}}" />
+            <!--<Label Style="{StaticResource DialogTitleLabelStyle}" Margin="4" Content="{Binding Path=LanguageResource[AnnotationsManagement], Source={StaticResource Lang}}" />-->
         </Border>
-        <Button Name="_CloseButton" Grid.Row="0" Grid.ColumnSpan="3" Style="{DynamicResource CloseButton2}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" Height="20" Margin="0,24,24,0" ToolTip="{Binding Path=LanguageResource[Close], Source={StaticResource Lang}}" Click="_CloseButton_Click" />
+        <Button Name="_CloseButton" Grid.Row="0" Grid.ColumnSpan="3" Style="{DynamicResource CloseButton2}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" Height="20" Margin="0,24,24,0" ToolTip="关闭" Click="_CloseButton_Click" />
         <Border Name="BodyArea" Grid.Row="1" Margin="16,0,16,0" Height="Auto">
             <Grid>
                 <Grid.RowDefinitions>
@@ -45,13 +45,13 @@
                 <ComboBox Name="cbo_mc" IsEditable="False" Height="28" Margin="0,6,14,0" Grid.Row="0" Grid.Column="1" Style="{StaticResource ComboBoxStyle}" />
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2">
                     <Label Grid.Row="0" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="删除：" />
-                    <Image Name="btnsc" Height="25" Width="25" Source="images/sc.png" ToolTipService.ToolTip="{Binding Path=LanguageResource[ADelete], Source={StaticResource Lang}}" />
+                    <Image Name="btnsc" Height="25" Width="25"  ToolTipService.ToolTip="删除" />
                     <Label Grid.Row="0" Margin="20,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="全部删除" />
-                    <Image Name="btnallsc" Height="25" Width="25" Source="images/sc.png" ToolTipService.ToolTip="{Binding Path=LanguageResource[ADeleteAll], Source={StaticResource Lang}}" />
+                    <Image Name="btnallsc" Height="25" Width="25"  ToolTipService.ToolTip="全部删除" />
                     <Label Grid.Row="0" Margin="20,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="隐藏" />
-                    <Image Name="btnyc" Height="25" Width="25" Source="images/T_hidd.png" ToolTipService.ToolTip="{Binding Path=LanguageResource[Hide], Source={StaticResource Lang}}" />
+                    <Image Name="btnyc" Height="25" Width="25"  ToolTipService.ToolTip="隐藏" />
                     <Label Grid.Row="0" Margin="20,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="全部隐藏" />
-                    <Image Name="btnqyc" Height="25" Width="25" Source="images/qT_hidd.png" ToolTipService.ToolTip="{Binding Path=LanguageResource[HideAll], Source={StaticResource Lang}}" />
+                    <Image Name="btnqyc" Height="25" Width="25"  ToolTipService.ToolTip="全部隐藏" />
                 </StackPanel>
                 <Label Name="LineWidth" Grid.Row="2" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="线条宽度：" />
                 <ComboBox Name="LineWidthComboBox" IsEditable="False" Grid.Column="1" Grid.Row="2" Style="{StaticResource ComboBoxStyle}" Height="28" FontSize="14" VerticalAlignment="Center" Margin="0,6,14,0">
@@ -79,19 +79,19 @@
                 <StackPanel Grid.Row="7" Orientation="Horizontal" Grid.Column="1">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <RadioButton Name="Rad_1" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="15" GroupName="Q" IsChecked="True" />
-                        <Image Source="images/pin_1.png" Height="60" Width="40" />
+                        <!--<Image Source="images/pin_1.png" Height="60" Width="40" />-->
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <RadioButton Name="Rad_2" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="15" GroupName="Q" />
-                        <Image Source="images/pin_2.png" Height="60" Width="40" />
+                        <!--<Image Source="images/pin_2.png" Height="60" Width="40" />-->
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <RadioButton Name="Rad_3" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="15" GroupName="Q" />
-                        <Image Source="images/pin_3.png" Height="60" Width="40" />
+                        <!--<Image Source="images/pin_3.png" Height="60" Width="40" />-->
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <RadioButton Name="Rad_4" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="15" GroupName="Q" />
-                        <Image Source="images/pin_4.png" Height="60" Width="40" />
+                        <!--<Image Source="images/pin_4.png" Height="60" Width="40" />-->
                     </StackPanel>
                 </StackPanel>
                 <Label Name="showAnno" Grid.Row="8" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="显示测量信息：" />

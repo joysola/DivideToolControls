@@ -17,6 +17,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Path = System.Windows.Shapes.Path;
 
@@ -36,7 +37,11 @@ namespace DivideToolControls.Helper
         private List<AnnoBase> objectList = new List<AnnoBase>();
         private List<AnnoTmaRect> tmaObjList = new List<AnnoTmaRect>();
         private Dictionary<int, AnnoDIYCtcRect> annoDiyCtcRectDic = new Dictionary<int, AnnoDIYCtcRect>();
+        private string _filePath;
+        private string TempPath;
+        private string TempFilename;
         public Visibility isAnnoManageWind = Visibility.Collapsed;
+        private List<Image> ListImg = new List<Image>();
 
 
         private AnnoListWind _annoListWind;
@@ -46,12 +51,13 @@ namespace DivideToolControls.Helper
         private Slider3D _x3dSlider;
         private Grid _layoutBody;
         private Path _annoPath;
-
-
+        private Canvas _canvasboard;
+        private Grid _bg;
+        private Canvas _zoomCanvas;
         /// <summary>
         /// 对应mainpage
         /// </summary>
-        public UserControl CurCtl { get; set; }
+        public FrameworkElement CurCtl { get; set; }
         public AnnoListWind AnnoListWind { get => _annoListWind; set => _annoListWind = value; }
         public AnnoWind AnnoWind { get => _annoWind; set => _annoWind = value; }
         public Navmap Nav { get => _nav; set => _nav = value; }
@@ -59,9 +65,30 @@ namespace DivideToolControls.Helper
         public Slider3D X3DSlider { get => _x3dSlider; set => _x3dSlider = value; }
         public Grid LayoutBody { get => _layoutBody; set => _layoutBody = value; }
         public Path AnnoPath { get => _annoPath; set => _annoPath = value; }
+        public Canvas Canvasboard { get => _canvasboard; set => _canvasboard = value; }
+        public Grid Bg { get => _bg; set => _bg = value; }
+        public Canvas ZoomCanvas { get => _zoomCanvas; set => _zoomCanvas = value; }
         public Action RefreshAction { get; set; }
 
-        public void InitRegisterEvents()
+
+        public void InitAll(string filepath)
+        {
+            _filePath = filepath;
+            ZoomModel.Canvasboard = _canvasboard;
+            Bg.Children.Add(msi);
+            // MultiScaleImage的 ZoomableCanvas的 Scale或Offset属性变化时，通知回调
+            LoadMsi(_filePath);
+            msi.Ini += msi_Ini;
+            RegisterMsiEvents();
+            Setting.IsSynchronous = false;
+            InitAnnoWinRegisterEvents();
+            ZoomableCanvas.Refresh += (sender, e) =>
+            {
+                RefreshAction?.Invoke();
+            };
+        }
+
+        public void InitAnnoWinRegisterEvents()
         {
             _annoListWind = new AnnoListWind();
             _annoListWind.Owner = Application.Current.MainWindow;
@@ -93,7 +120,7 @@ namespace DivideToolControls.Helper
             _annoWind._CancelAnno.Click += CancelAnno_Click;
         }
 
-        public void RegisterMsiEvents()
+        private void RegisterMsiEvents()
         {
             msi.TouchUp += msi_TouchUp;
             msi.TouchMove += msi_TouchMove;
@@ -110,6 +137,24 @@ namespace DivideToolControls.Helper
             msi.IsManipulationEnabled = true;
             msi.ManipulationStarting += msi_ManipulationStarting;
             msi.ManipulationDelta += msi_ManipulationDelta;
+        }
+        private void UnRegisterMsiEvents()
+        {
+            msi.MouseLeftButtonDown -= msi_MouseLeftButtonDown;
+            msi.MouseMove -= msi_MouseMove;
+            msi.MouseLeftButtonUp -= msi_MouseLeftButtonMouseUp;
+            msi.LostMouseCapture -= msi_MouseLeftButtonMouseUp;
+            msi.MouseLeave -= msi_MouseLeftButtonMouseUp;
+            msi.MouseWheel -= msi_PreviewMouseWheel;
+            msi.MouseDoubleClick -= msi_MouseDoubleClick;
+            msi.MouseRightButtonDown -= msi_MouseRightButtonDown;
+            msi.MouseEnter -= msi_MouseLeftButtonMouseUp;
+            msi.TouchUp -= msi_TouchUp;
+            msi.TouchMove -= msi_TouchMove;
+            msi.TouchDown -= msi_TouchDown;
+            msi.IsManipulationEnabled = false;
+            msi.ManipulationStarting -= msi_ManipulationStarting;
+            msi.ManipulationDelta -= msi_ManipulationDelta;
         }
         #region MSI事件
         private void msi_TouchUp(object sender, TouchEventArgs e)
@@ -171,7 +216,7 @@ namespace DivideToolControls.Helper
             isDrag = true;
             touch.Add(e.TouchDevice.Id);
         }
-        public void msi_MouseLeftButtonDown(object sender, MouseEventArgs e)
+        private void msi_MouseLeftButtonDown(object sender, MouseEventArgs e)
         {
             Keyboard.Focus(CurCtl);
             Setting.isCtrl = 0;
@@ -226,7 +271,7 @@ namespace DivideToolControls.Helper
             }
         }
 
-        public void msi_MouseMove(object sender, MouseEventArgs e)
+        private void msi_MouseMove(object sender, MouseEventArgs e)
         {
             lastMousePos = e.GetPosition(msi);
             if (isDrag)
@@ -253,7 +298,7 @@ namespace DivideToolControls.Helper
                 lastMouseDownPos = lastMousePos;
             }
         }
-        public void msi_MouseLeftButtonMouseUp(object sender, MouseEventArgs e)
+        private void msi_MouseLeftButtonMouseUp(object sender, MouseEventArgs e)
         {
             isDrag = false;
         }
@@ -270,7 +315,7 @@ namespace DivideToolControls.Helper
                 num2 = ZoomHelper.CalcSpeed(num);
                 ZoomModel.PrevTimeStap = e.Timestamp;
                 double curscale = ZoomModel.Curscale;
-                if (curscale == ZoomModel.PrevTimeStap || !(ZoomModel.PrevTimeStap > 1E-08))
+                if (curscale == ZoomModel.PrevNewzoom || !(ZoomModel.PrevTimeStap > 1E-08))
                 {
                     double magAdjValueByCurMag = ZoomHelper.GetMagAdjValueByCurMag(ZoomModel.Curscale);
                     curscale = ((e.Delta <= 0) ? (curscale - magAdjValueByCurMag * num2) : (curscale + magAdjValueByCurMag * num2));
@@ -309,50 +354,47 @@ namespace DivideToolControls.Helper
         }
         private void msi_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            System.Windows.Point position = e.GetPosition(this);
+            Point position = e.GetPosition(CurCtl);
             double num = 2.4000000953674316;
-            double curscale = Curscale;
+            double curscale = ZoomModel.Curscale;
             curscale *= num;
-            if (curscale > (double)SlideZoom * Setting.MaxMagValue)
+            if (curscale > ZoomModel.SlideZoom * Setting.MaxMagValue)
             {
-                curscale = (double)SlideZoom * Setting.MaxMagValue;
-                num = curscale / Curscale;
+                curscale = ZoomModel.SlideZoom * Setting.MaxMagValue;
+                num = curscale / ZoomModel.Curscale;
             }
             if (Setting.IsSynchronous)
             {
                 foreach (KeyValuePair<object, object> item in Setting.TabsDic)
                 {
-                    if ((Mainpage)item.Value != this)
-                    {
-                        ((Mainpage)item.Value).SynMsi(Curscale, position, num);
-                    }
+                    SynMsi(ZoomModel.Curscale, position, num);
                 }
             }
-            System.Windows.Point center = new System.Windows.Point(0.0, 0.0);
-            position = new System.Windows.Point(position.X - LayoutBody.ActualWidth / 2.0, position.Y - LayoutBody.ActualHeight / 2.0);
-            System.Windows.Point point = KCommon.PointRotate(center, position, Rotate);
+            Point center = new Point(0.0, 0.0);
+            position = new Point(position.X - LayoutBody.ActualWidth / 2.0, position.Y - LayoutBody.ActualHeight / 2.0);
+            Point point = KCommon.PointRotate(center, position, ZoomModel.Rotate);
             double x = point.X + msi.ActualWidth / 2.0;
             double y = point.Y + msi.ActualHeight / 2.0;
-            position = new System.Windows.Point(x, y);
+            position = new Point(x, y);
             double num2 = msi.ZoomableCanvas.Extent.Width * msi.ZoomableCanvas.Scale;
             double num3 = msi.ZoomableCanvas.Extent.Height * msi.ZoomableCanvas.Scale;
-            double num4 = msi.ZoomableCanvas.Extent.Width * (curscale / (double)SlideZoom);
-            double num5 = msi.ZoomableCanvas.Extent.Height * (curscale / (double)SlideZoom);
-            System.Windows.Point point2 = new System.Windows.Point(position.X + msi.ZoomableCanvas.Offset.X - num2 / 2.0, position.Y + msi.ZoomableCanvas.Offset.Y - num3 / 2.0);
-            System.Windows.Point point3 = new System.Windows.Point(point2.X * num + num4 / 2.0 - position.X - (msi.ActualWidth / 2.0 - position.X), point2.Y * num + num5 / 2.0 - position.Y - (msi.ActualHeight / 2.0 - position.Y));
+            double num4 = msi.ZoomableCanvas.Extent.Width * (curscale / ZoomModel.SlideZoom);
+            double num5 = msi.ZoomableCanvas.Extent.Height * (curscale / ZoomModel.SlideZoom);
+            Point point2 = new Point(position.X + msi.ZoomableCanvas.Offset.X - num2 / 2.0, position.Y + msi.ZoomableCanvas.Offset.Y - num3 / 2.0);
+            Point point3 = new Point(point2.X * num + num4 / 2.0 - position.X - (msi.ActualWidth / 2.0 - position.X), point2.Y * num + num5 / 2.0 - position.Y - (msi.ActualHeight / 2.0 - position.Y));
             double scale = msi.ZoomableCanvas.Scale;
-            int level = msi.Source.GetLevel(curscale / (double)SlideZoom);
+            int level = msi.Source.GetLevel(curscale / ZoomModel.SlideZoom);
             int currentLevel = msi._spatialSource.CurrentLevel;
             if (level != currentLevel)
             {
                 msi._spatialSource.CurrentLevel = level;
             }
-            if (scale != curscale / (double)SlideZoom)
+            if (scale != curscale / ZoomModel.SlideZoom)
             {
                 double num6 = 4.0;
                 TimeSpan timeSpan = TimeSpan.FromMilliseconds(num6 * 100.0);
                 CubicEase easingFunction = new CubicEase();
-                msi.ZoomableCanvas.BeginAnimation(ZoomableCanvas.ScaleProperty, new DoubleAnimation(curscale / (double)SlideZoom, timeSpan)
+                msi.ZoomableCanvas.BeginAnimation(ZoomableCanvas.ScaleProperty, new DoubleAnimation(curscale / ZoomModel.SlideZoom, timeSpan)
                 {
                     EasingFunction = easingFunction
                 }, HandoffBehavior.Compose);
@@ -368,7 +410,7 @@ namespace DivideToolControls.Helper
             }
         }
 
-        public void msi_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void msi_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             // 右击菜单
 
@@ -410,7 +452,7 @@ namespace DivideToolControls.Helper
                 {
                     num2 = num;
                 }
-                System.Windows.Point point = new System.Windows.Point(frameworkElement.ActualWidth / 2.0, frameworkElement.ActualHeight / 2.0);
+                Point point = new Point(frameworkElement.ActualWidth / 2.0, frameworkElement.ActualHeight / 2.0);
                 if (Setting.IsSynchronous)
                 {
                     foreach (KeyValuePair<object, object> item in Setting.TabsDic)
@@ -425,12 +467,125 @@ namespace DivideToolControls.Helper
             }
         }
 
+        /// <summary>
+        /// 需要修改
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void msi_Ini(object sender, RoutedEventArgs e)
+        {
+            string filePath = _filePath;
+
+            TempPath = filePath.Substring(0, filePath.LastIndexOf("\\") + 1);
+            TempFilename = filePath.Substring(filePath.LastIndexOf("\\") + 1, filePath.Length - filePath.LastIndexOf("\\") - 1);
+
+            msi.Tag = "1";
+            ZoomModel.ALC.CB = AnnoListWind.cbo_mc;
+            ZoomModel.ALC.Tbk = AnnoListWind.tbk_info;
+            ZoomModel.ALC.Tbx = AnnoListWind.txt_xbz;
+            ZoomModel.ALC.qsr = AnnoListWind.txt_qsr;
+
+            ArcMenu();
+            ZoomModel.Fitratio = ZoomModel.SlideZoom * msi.ZoomableCanvas.Scale;
+
+            RefreshAction?.Invoke();
+        }
+
+        public void LoadMsi(string filename)
+        {
+            IniFile(filename);
+            int khiImageHeight = 1;
+            int khiImageWidth = 2;
+            int khiScanScale = 3;
+            float khiSpendTime = 0f;
+            double khiScanTime = 0.0;
+            float khiImageCapRes = 0f;
+            if (filename.IndexOf(".kfb") != -1)
+            {
+                DllImageFuc.GetScanLevelInfoFunc(ref ZoomModel.InfoStruct, ref ZoomModel.nCurLevel, ref ZoomModel.nTotalLevel);
+                if (ZoomModel.nTotalLevel > 2)
+                {
+                    if (ZoomModel.nTotalLevel % 2 == 0)
+                    {
+                        ZoomModel.MinLevel = -ZoomModel.nTotalLevel / 2 + 1;
+                        ZoomModel.MaxLevel = ZoomModel.nTotalLevel / 2;
+                    }
+                    else
+                    {
+                        ZoomModel.MinLevel = -(ZoomModel.nTotalLevel - 1) / 2;
+                        ZoomModel.MaxLevel = (ZoomModel.nTotalLevel - 1) / 2;
+                    }
+                    X3DSlider.Zvalue.Content = ZoomModel.nCurLevel;
+                    if (ZoomModel.nCurLevel == 0)
+                    {
+                        ZoomModel.LevelFilePath = filename;
+                    }
+                    else
+                    {
+                        ZoomModel.LevelFilePath = filename.Replace("_" + ZoomModel.nCurLevel + ".kfb", ".kfb");
+                    }
+                    if (CheckAllLevel())
+                    {
+                        X3DSlider.Visibility = Visibility.Visible;
+                    }
+                    if (filename == ZoomModel.LevelFilePath && ZoomModel.nCurLevel != 0)
+                    {
+                        X3DSlider.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
+            ZoomModel.DllImgFunc.CkGetHeaderInfoFunc(ZoomModel.InfoStruct, ref khiImageHeight, ref khiImageWidth, ref khiScanScale, ref khiSpendTime, ref khiScanTime, ref khiImageCapRes, ref ZoomModel.TileSize);
+            if (ZoomModel.TileSize == 0)
+            {
+                ZoomModel.TileSize = 256;
+            }
+            //msi.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, TileSize, 0, InfoStruct, khiScanScale, msi);
+            msi.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, ZoomModel.TileSize, 0, ZoomModel.InfoStruct, khiScanScale, msi, filename);
+            if ((double)khiImageCapRes == 0.0)
+            {
+                switch (khiScanScale)
+                {
+                    case 20:
+                        ZoomModel.Calibration = 0.5;
+                        break;
+                    case 40:
+                        ZoomModel.Calibration = 0.2439;
+                        break;
+                }
+            }
+            else
+            {
+                ZoomModel.Calibration = khiImageCapRes;
+                if (khiScanScale == 40)
+                {
+                    if (Setting.Calibration40 != 1.0)
+                    {
+                        Setting.MargPara = Setting.Calibration40;
+                    }
+                    if (Setting.CalibrationX40 != 1.0)
+                    {
+                        ZoomModel.Calibration = Setting.CalibrationX40;
+                    }
+                }
+                if (khiScanScale == 20)
+                {
+                    if (Setting.Calibration20 != 1.0)
+                    {
+                        Setting.MargPara = Setting.Calibration20;
+                    }
+                    if (Setting.CalibrationX20 != 1.0)
+                    {
+                        ZoomModel.Calibration = Setting.CalibrationX20;
+                    }
+                }
+            }
+            ZoomModel.SlideZoom = khiScanScale;
+            ZoomModel.ImageW = khiImageWidth;
+            ZoomModel.ImageH = khiImageHeight;
+        }
 
 
-
-
-
-        public void TmoveSetOffset(Point p)
+        private void TmoveSetOffset(Point p)
         {
             Point offset = msi.ZoomableCanvas.Offset;
             Point p2 = new Point(p.X, p.Y);
@@ -441,7 +596,7 @@ namespace DivideToolControls.Helper
             msi.ZoomableCanvas.Offset = new Point(offset.X, offset.Y);
             msi.ZoomableCanvas.ApplyAnimationClock(ZoomableCanvas.OffsetProperty, null);
         }
-        public void IsArcMenu(Visibility v)
+        private void IsArcMenu(Visibility v)
         {
             _annoPath.Visibility = v;
             int count = listImg.Count;
@@ -510,7 +665,7 @@ namespace DivideToolControls.Helper
                 }
             }
         }
-        public string GetUpLevelFileName()
+        private string GetUpLevelFileName()
         {
             int num = int.Parse(_x3dSlider.Zvalue.Content.ToString()) + 1;
             if (num > ZoomModel.MaxLevel)
@@ -1185,5 +1340,175 @@ namespace DivideToolControls.Helper
             }
         }
         #endregion 注册事件
+
+
+        private void IniFile(string fileName)
+        {
+            ZoomModel.InfoStruct.DataFilePTR = 0;
+            ZoomModel.DllImgFunc.CkInitImageFileFunc(ref ZoomModel.InfoStruct, fileName);
+        }
+        private bool CheckAllLevel()
+        {
+            for (int i = ZoomModel.MinLevel; i < ZoomModel.MinLevel + ZoomModel.nTotalLevel; i++)
+            {
+                string path = ZoomModel.LevelFilePath;
+                if (i != 0)
+                {
+                    path = ZoomModel.LevelFilePath.Replace(".kfb", "_" + i + ".kfb");
+                }
+                if (File.Exists(path) && i != ZoomModel.nCurLevel)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void SynMsi(double newzoom, System.Windows.Point p, double dbscale)
+        {
+            newzoom *= dbscale;
+            if (newzoom > ZoomModel.SlideZoom * Setting.MaxMagValue)
+            {
+                newzoom = ZoomModel.SlideZoom * Setting.MaxMagValue;
+                dbscale = newzoom / ZoomModel.Curscale;
+            }
+            Point center = new Point(0.0, 0.0);
+            p = new Point(p.X - LayoutBody.ActualWidth / 2.0, p.Y - LayoutBody.ActualHeight / 2.0);
+            Point point = KCommon.PointRotate(center, p, ZoomModel.Rotate);
+            double x = point.X + msi.ActualWidth / 2.0;
+            double y = point.Y + msi.ActualHeight / 2.0;
+            p = new Point(x, y);
+            double num = msi.ZoomableCanvas.Extent.Width * msi.ZoomableCanvas.Scale;
+            double num2 = msi.ZoomableCanvas.Extent.Height * msi.ZoomableCanvas.Scale;
+            double num3 = msi.ZoomableCanvas.Extent.Width * (newzoom / ZoomModel.SlideZoom);
+            double num4 = msi.ZoomableCanvas.Extent.Height * (newzoom / ZoomModel.SlideZoom);
+            Point point2 = new System.Windows.Point(p.X + msi.ZoomableCanvas.Offset.X - num / 2.0, p.Y + msi.ZoomableCanvas.Offset.Y - num2 / 2.0);
+            Point point3 = new System.Windows.Point(point2.X * dbscale + num3 / 2.0 - p.X - (msi.ActualWidth / 2.0 - p.X), point2.Y * dbscale + num4 / 2.0 - p.Y - (msi.ActualHeight / 2.0 - p.Y));
+            double scale = msi.ZoomableCanvas.Scale;
+            int level = msi.Source.GetLevel(newzoom / ZoomModel.SlideZoom);
+            int currentLevel = msi._spatialSource.CurrentLevel;
+            if (level != currentLevel)
+            {
+                msi._spatialSource.CurrentLevel = level;
+            }
+            if (scale != newzoom / ZoomModel.SlideZoom)
+            {
+                double num5 = 4.0;
+                TimeSpan timeSpan = TimeSpan.FromMilliseconds(num5 * 100.0);
+                CubicEase easingFunction = new CubicEase();
+                msi.ZoomableCanvas.BeginAnimation(ZoomableCanvas.ScaleProperty, new DoubleAnimation(newzoom / ZoomModel.SlideZoom, timeSpan)
+                {
+                    EasingFunction = easingFunction
+                }, HandoffBehavior.Compose);
+                msi.ZoomableCanvas.BeginAnimation(ZoomableCanvas.OffsetProperty, new PointAnimation(new Point(point3.X, point3.Y), timeSpan)
+                {
+                    EasingFunction = easingFunction
+                }, HandoffBehavior.Compose);
+            }
+            else
+            {
+                msi.ZoomableCanvas.Offset = new System.Windows.Point(point3.X, point3.Y);
+                msi.ZoomableCanvas.ApplyAnimationClock(ZoomableCanvas.OffsetProperty, null);
+            }
+        }
+        private void ArcMenu()
+        {
+            if (AnnoPath != null)
+            {
+                ZoomCanvas.Children.Remove(AnnoPath);
+                int count = ListImg.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    ZoomCanvas.Children.Remove(ListImg[i]);
+                }
+                ListImg.Clear();
+            }
+            AnnoPath = new Path();
+            AnnoPath.Visibility = Visibility.Collapsed;
+            ZoomCanvas.Children.Add(AnnoPath);
+            PathGeometry pathGeometry = new PathGeometry();
+            PathFigure pathFigure = new PathFigure();
+            ArcSegment arcSegment = new ArcSegment();
+            double num = msi.ActualWidth;
+            double num2 = msi.ActualHeight;
+            if (ZoomModel.Rotate > 0.0 && num > Setting.AngelMsiOffset * 2.0 && num2 > Setting.AngelMsiOffset * 2.0)
+            {
+                num -= Setting.AngelMsiOffset * 2.0;
+                num2 -= Setting.AngelMsiOffset * 2.0;
+            }
+            pathFigure.StartPoint = new Point(num - 150.0, num2);
+            arcSegment.Point = new Point(num, num2 - 150.0);
+            arcSegment.Size = new Size(1.0, 1.0);
+            AnnoPath.Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 74, 132));
+            AnnoPath.StrokeThickness = 4.0;
+            arcSegment.IsLargeArc = true;
+            arcSegment.SweepDirection = SweepDirection.Clockwise;
+            pathFigure.Segments.Add(arcSegment);
+            pathGeometry.Figures.Add(pathFigure);
+            AnnoPath.Data = pathGeometry;
+            ZoomCanvas.Children.Add(DrawZoomImage(num - 50.0, num2 - 200.0, "1"));
+            ZoomCanvas.Children.Add(DrawZoomImage(num - 100.0, num2 - 210.0, "2"));
+            ZoomCanvas.Children.Add(DrawZoomImage(num - 150.0, num2 - 200.0, "4"));
+            ZoomCanvas.Children.Add(DrawZoomImage(num - 190.0, num2 - 170.0, "10"));
+            ZoomCanvas.Children.Add(DrawZoomImage(num - 210.0, num2 - 120.0, "20"));
+            ZoomCanvas.Children.Add(DrawZoomImage(num - 200.0, num2 - 60.0, "40"));
+        }
+        private Image DrawZoomImage(double Left, double Top, string Scale)
+        {
+            Image image = new Image();
+            if (Scale == "40")
+            {
+                image.Width = 50.0;
+                image.Height = 50.0;
+            }
+            else
+            {
+                image.Width = 60.0;
+                image.Height = 60.0;
+            }
+            image.Source = new BitmapImage(new Uri("images/bei" + Scale + ".png", UriKind.Relative));
+            image.SetValue(Canvas.LeftProperty, Left);
+            image.SetValue(Canvas.TopProperty, Top);
+            image.Visibility = Visibility.Collapsed;
+            image.Name = "buttonR" + Scale;
+            image.MouseLeftButtonDown += ZoomClick;
+            ListImg.Add(image);
+            return image;
+        }
+        private void ZoomClick(object sender, RoutedEventArgs e)
+        {
+            ZoomModel.IsDw = false;
+            double zoom_ratio = 0.0;
+            switch (((Image)sender).Name)
+            {
+                case "buttonR1":
+                    zoom_ratio = 1.0;
+                    break;
+                case "buttonR2":
+                    zoom_ratio = 2.0;
+                    break;
+                case "buttonR4":
+                    zoom_ratio = 4.0;
+                    break;
+                case "buttonR10":
+                    zoom_ratio = 10.0;
+                    break;
+                case "buttonR20":
+                    zoom_ratio = 20.0;
+                    break;
+                case "buttonR40":
+                    zoom_ratio = 40.0;
+                    break;
+            }
+            if (Setting.IsSynchronous)
+            {
+                foreach (KeyValuePair<object, object> item in Setting.TabsDic)
+                {
+
+                    ZoomHelper.ZoomRatio(zoom_ratio, msi, RefreshAction);
+                }
+            }
+            ZoomHelper.ZoomRatio(zoom_ratio, msi, RefreshAction);
+        }
     }
 }

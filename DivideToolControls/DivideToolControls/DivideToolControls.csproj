@@ -68,6 +68,7 @@
     </ApplicationDefinition>
     <Compile Include="AnnotationControls\AnnoDIYCtcRect.cs" />
     <Compile Include="AnnotationControls\AnnoPin.cs" />
+    <Compile Include="AnnotationControls\AnnoRectZoom.cs" />
     <Compile Include="AnnotationControls\AnnoTmaRect.cs" />
     <Compile Include="Controls\CtcList.xaml.cs">
       <DependentUpon>CtcList.xaml</DependentUpon>
@@ -101,10 +102,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TestAnnoBtnList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -121,9 +118,6 @@
     </Compile>
     <Compile Include="Controls\Navmap.xaml.cs">
       <DependentUpon>Navmap.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\TestAnnoBtnList.xaml.cs">
-      <DependentUpon>TestAnnoBtnList.xaml</DependentUpon>
     </Compile>
     <Compile Include="DeepZoomControls\VirtualPanel.cs" />
     <Compile Include="DeepZoom\DeepZoomImageTileSource.cs" />

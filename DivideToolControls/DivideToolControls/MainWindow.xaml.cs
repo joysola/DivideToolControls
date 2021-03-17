@@ -29,7 +29,7 @@ namespace DivideToolControls
     public partial class MainWindow : Window
     {
         private DllImageFuc _dllImageFuc = new DllImageFuc();
-        private MultiScaleImage msi = new MultiScaleImage();
+        private MultiScaleImage msi = ZoomModel.MulScaImg;
         private DispatcherTimer _timer;
         private string filePath = @"K:\Test\DivideToolControls\DivideToolControls\DivideToolControls\2020-12-04_15_53_56.kfb";
         private IMAGE_INFO_STRUCT InfoStruct;
@@ -44,12 +44,26 @@ namespace DivideToolControls
         public MainWindow()
         {
             InitializeComponent();
-
-            InitOnce();
-            StartupOpenFiles(filePath);
+            //this.Loaded += (s, e) => InitTest();
+            //InitOnce();
+            //StartupOpenFiles(filePath);
             
             ClearMemoryThread();
         }
+
+        private void InitTest()
+        {
+            MulScanImgHelper.Instance.CurCtl = this;
+            MulScanImgHelper.Instance.Bg = this.Bg;
+            MulScanImgHelper.Instance.Nav = this.nav;
+            MulScanImgHelper.Instance.X3DSlider = this.x3dSlider;
+            MulScanImgHelper.Instance.LayoutBody = this.LayoutBody;
+            MulScanImgHelper.Instance.Canvasboard = this.canvasboard;
+            MulScanImgHelper.Instance.ZoomCanvas = this.Zoomcanvas;
+            MulScanImgHelper.Instance.RefreshAction = Refresh;
+            MulScanImgHelper.Instance.InitAll(filePath);
+        }
+
         public void ClearMemoryThread()
         {
             _timer = new DispatcherTimer(DispatcherPriority.Background);
@@ -461,5 +475,9 @@ namespace DivideToolControls
             //}
         }
 
+        private void WindowRendered(object sender, EventArgs e)
+        {
+            InitTest();
+        }
     }
 }

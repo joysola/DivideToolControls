@@ -19,9 +19,9 @@
         </Grid.RowDefinitions>
         <Rectangle Grid.RowSpan="21" Grid.ColumnSpan="3" Style="{StaticResource DialogBackgroundRectangleStyle}" />
         <Border Name="TitleArea" Grid.Row="0" Grid.ColumnSpan="3" Style="{StaticResource DialogTitleBorderStyle}" Margin="16,16,16,0" VerticalAlignment="Top">
-            <Label Style="{StaticResource DialogTitleLabelStyle}" Margin="4" Content="{Binding Path=LanguageResource[AnnotationsManagement], Source={StaticResource Lang}}" />
+            <!--<Label Style="{StaticResource DialogTitleLabelStyle}" Margin="4" Content="{Binding Path=LanguageResource[AnnotationsManagement], Source={StaticResource Lang}}" />-->
         </Border>
-        <Button Name="_CloseButton" Grid.Row="0" Grid.ColumnSpan="3" Style="{DynamicResource CloseButton2}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" Height="20" Margin="0,24,24,0" ToolTip="{Binding Path=LanguageResource[Close], Source={StaticResource Lang}}" Click="_CloseButton_Click" />
+        <Button Name="_CloseButton" Grid.Row="0" Grid.ColumnSpan="3" Style="{DynamicResource CloseButton2}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" Height="20" Margin="0,24,24,0" ToolTip="关闭" Click="_CloseButton_Click" />
         <Border Name="BodyArea" Grid.Row="1" Margin="16,0,16,0" Height="Auto">
             <Grid>
                 <Grid.RowDefinitions>
@@ -38,7 +38,7 @@
                     <ColumnDefinition Width="108*" />
                     <ColumnDefinition Width="338*" />
                 </Grid.ColumnDefinitions>
-                <Label Name="LineWidth" Grid.Row="0" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="{Binding Path=LanguageResource[LineWidth], Source={StaticResource Lang}}" />
+                <Label Name="LineWidth" Grid.Row="0" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="" />
                 <ComboBox Name="LineWidthComboBox" IsEditable="False" Grid.Column="1" Grid.Row="0" Style="{StaticResource ComboBoxStyle}" Height="28" FontSize="14" VerticalAlignment="Center" Margin="0,6,14,0">
                     <ComboBoxItem>1</ComboBoxItem>
                     <ComboBoxItem IsSelected="True">2</ComboBoxItem>
@@ -46,16 +46,16 @@
                     <ComboBoxItem>10</ComboBoxItem>
                     <ComboBoxItem>20</ComboBoxItem>
                 </ComboBox>
-                <Label Grid.Row="1" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="{Binding Path=LanguageResource[Name], Source={StaticResource Lang}}" />
+                <Label Grid.Row="1" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="" />
                 <TextBox Name="AnnoName" Grid.Column="1" MaxLength="30" Grid.Row="1" Height="30" FontSize="14" Margin="0,3,14,0" />
-                <Label Grid.Row="2" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="{Binding Path=LanguageResource[ADescriptionShow], Source={StaticResource Lang}}" />
+                <Label Grid.Row="2" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="" />
                 <CheckBox Name="ShowMs" VerticalAlignment="Stretch" Width="40" Style="{DynamicResource CheckBoxStyle2}" IsChecked="True" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" />
-                <Label Grid.Row="3" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="{Binding Path=LanguageResource[ADescription], Source={StaticResource Lang}}" />
+                <Label Grid.Row="3" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="" />
                 <TextBox Name="AnnoDes" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" Height="60" FontSize="14" Margin="0,3,5,0" TextWrapping="Wrap" AcceptsReturn="True" />
-                <Label Grid.Row="4" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="{Binding Path=LanguageResource[Color], Source={StaticResource Lang}}" />
+                <Label Grid.Row="4" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="" />
                 <xctk:ColorPicker Name="_colorPicker" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" DisplayColorAndName="True" Width="338" />
                 <StackPanel Grid.Row="5" VerticalAlignment="Center">
-                    <TextBlock Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Text="{Binding Path=LanguageResource[Positionicon], Source={StaticResource Lang}}" />
+                    <TextBlock Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Text="" />
                 </StackPanel>
                 <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.Column="1">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -75,17 +75,17 @@
                         <Image Source="images/pin_4.png" Height="60" Width="40" />
                     </StackPanel>
                 </StackPanel>
-                <Label Grid.Row="6" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="{Binding Path=LanguageResource[Display], Source={StaticResource Lang}}" />
+                <Label Grid.Row="6" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="" />
                 <CheckBox Name="ShowInfo" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Style="{DynamicResource CheckBoxStyle2}" IsChecked="True" />
-                <Label Grid.Row="7" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="{Binding Path=LanguageResource[MeasureInfo], Source={StaticResource Lang}}" />
+                <Label Grid.Row="7" Margin="10,3,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Content="" />
                 <TextBlock Name="tbk_info" Grid.Row="7" Grid.Column="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" />
             </Grid>
         </Border>
         <Border Name="CommandArea" Grid.Row="2" Style="{StaticResource DialogCommandAreaBorderStyle}" Margin="16,0,16,16" VerticalAlignment="Bottom" Height="52" CornerRadius="8">
             <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,14,0">
-                    <Button Name="_SaveAnno" Style="{StaticResource ButtonStyle}" IsDefault="True" HorizontalAlignment="Right" Width="60" Height="28" ScrollViewer.VerticalScrollBarVisibility="Disabled" Content="{Binding Path=LanguageResource[Ok], Source={StaticResource Lang}}" />
-                    <Button Name="_CancelAnno" Style="{StaticResource ButtonStyle}" IsCancel="True" HorizontalAlignment="Right" Width="60" Height="28" Margin="5,0,0,0" ScrollViewer.VerticalScrollBarVisibility="Disabled" Content="{Binding Path=LanguageResource[Cancel], Source={StaticResource Lang}}" />
+                    <Button Name="_SaveAnno" Style="{StaticResource ButtonStyle}" IsDefault="True" HorizontalAlignment="Right" Width="60" Height="28" ScrollViewer.VerticalScrollBarVisibility="Disabled" Content="" />
+                    <Button Name="_CancelAnno" Style="{StaticResource ButtonStyle}" IsCancel="True" HorizontalAlignment="Right" Width="60" Height="28" Margin="5,0,0,0" ScrollViewer.VerticalScrollBarVisibility="Disabled" Content="" />
                 </StackPanel>
             </Grid>
         </Border>

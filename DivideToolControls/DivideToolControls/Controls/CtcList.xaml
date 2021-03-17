@@ -262,5 +262,5 @@
                 </DataGrid>
             </StackPanel>
         </StackPanel>
-    </Grid
+    </Grid>
 </UserControl>
