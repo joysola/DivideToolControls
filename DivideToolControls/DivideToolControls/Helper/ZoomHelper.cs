@@ -17,7 +17,6 @@ namespace DivideToolControls.Helper
 {
     public class ZoomHelper
     {
-        //public static ZoomHelper Instance { get; } = new ZoomHelper();
         private static double[] m_magV = new double[12]
         {
         320.0,
@@ -156,134 +155,11 @@ namespace DivideToolControls.Helper
         }
         public static void ReDraw()
         {
-            foreach (AnnoBase item in ZoomModel.Objectlist)
+            foreach (AnnoBase item in ZoomModel.ObjList)
             {
                 item.UpdateVisual();
             }
         }
-
-        public void StartupOpenFiles(string filename)
-        {
-            //LoadMsi(filename);
-            ZoomModel.MulScaImg.Ini += Msi_Ini;
-            ZoomModel.MulScaImg.MouseWheel += Msi_MouseWheel;
-            ZoomModel.MulScaImg.IsManipulationEnabled = true;
-            ZoomModel.MulScaImg.ManipulationStarting += msi_ManipulationStarting;
-        }
-
-        private void msi_ManipulationStarting(object sender, ManipulationStartingEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Msi_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Msi_Ini(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public void LoadMsi(string filename)
-        //{
-        //    IniFile(filename);
-        //    int khiImageHeight = 1;
-        //    int khiImageWidth = 2;
-        //    int khiScanScale = 3;
-        //    float khiSpendTime = 0f;
-        //    double khiScanTime = 0.0;
-        //    float khiImageCapRes = 0f;
-        //    if (filename.IndexOf(".kfb") != -1)
-        //    {
-        //        DllImageFuc.GetScanLevelInfoFunc(ref ZoomModel.InfoStruct, ref ZoomModel.nCurLevel, ref ZoomModel.nTotalLevel);
-        //        if (ZoomModel.nTotalLevel > 2)
-        //        {
-        //            if (ZoomModel.nTotalLevel % 2 == 0)
-        //            {
-        //                ZoomModel.MinLevel = -ZoomModel.nTotalLevel / 2 + 1;
-        //                ZoomModel.MaxLevel = ZoomModel.nTotalLevel / 2;
-        //            }
-        //            else
-        //            {
-        //                ZoomModel.MinLevel = -(ZoomModel.nTotalLevel - 1) / 2;
-        //                ZoomModel.MaxLevel = (ZoomModel.nTotalLevel - 1) / 2;
-        //            }
-        //            x3dSlider.Zvalue.Content = ZoomModel.nCurLevel;
-        //            if (ZoomModel.nCurLevel == 0)
-        //            {
-        //                ZoomModel.LevelFilePath = filename;
-        //            }
-        //            else
-        //            {
-        //                ZoomModel.LevelFilePath = filename.Replace("_" + ZoomModel.nCurLevel + ".kfb", ".kfb");
-        //            }
-        //            if (CheckAllLevel())
-        //            {
-        //                x3dSlider.Visibility = Visibility.Visible;
-        //            }
-        //            if (filename == ZoomModel.LevelFilePath && ZoomModel.nCurLevel != 0)
-        //            {
-        //                x3dSlider.Visibility = Visibility.Collapsed;
-        //            }
-        //        }
-        //    }
-        //    ZoomModel.DllImgFunc.CkGetHeaderInfoFunc(ZoomModel.InfoStruct, ref khiImageHeight, ref khiImageWidth, ref khiScanScale, ref khiSpendTime, ref khiScanTime, ref khiImageCapRes, ref ZoomModel.TileSize);
-        //    if (ZoomModel.TileSize == 0)
-        //    {
-        //        ZoomModel.TileSize = 256;
-        //    }
-        //    //msi.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, TileSize, 0, InfoStruct, khiScanScale, msi);
-        //    ZoomModel.MulScaImg.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, ZoomModel.TileSize, 0, ZoomModel.InfoStruct, khiScanScale, ZoomModel.MulScaImg, filename);
-        //    if ((double)khiImageCapRes == 0.0)
-        //    {
-        //        switch (khiScanScale)
-        //        {
-        //            case 20:
-        //                ZoomModel.Calibration = 0.5;
-        //                break;
-        //            case 40:
-        //                ZoomModel.Calibration = 0.2439;
-        //                break;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        ZoomModel.Calibration = khiImageCapRes;
-        //        if (khiScanScale == 40)
-        //        {
-        //            if (Setting.Calibration40 != 1.0)
-        //            {
-        //                Setting.MargPara = Setting.Calibration40;
-        //            }
-        //            if (Setting.CalibrationX40 != 1.0)
-        //            {
-        //                ZoomModel.Calibration = Setting.CalibrationX40;
-        //            }
-        //        }
-        //        if (khiScanScale == 20)
-        //        {
-        //            if (Setting.Calibration20 != 1.0)
-        //            {
-        //                Setting.MargPara = Setting.Calibration20;
-        //            }
-        //            if (Setting.CalibrationX20 != 1.0)
-        //            {
-        //                ZoomModel.Calibration = Setting.CalibrationX20;
-        //            }
-        //        }
-        //    }
-        //    ZoomModel.SlideZoom = khiScanScale;
-        //    ZoomModel.ImageW = khiImageWidth;
-        //    ZoomModel.ImageH = khiImageHeight;
-        //}
-        public void IniFile(string fileName)
-        {
-            ZoomModel.InfoStruct.DataFilePTR = 0;
-            ZoomModel.DllImgFunc.CkInitImageFileFunc(ref ZoomModel.InfoStruct, fileName);
-        }
-
 
     }
 }

@@ -73,6 +73,7 @@
     <Compile Include="Controls\CtcList.xaml.cs">
       <DependentUpon>CtcList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helper\AnnoWindHelper.cs" />
     <Compile Include="WinCtls\AnnoListWind.xaml.cs">
       <DependentUpon>AnnoListWind.xaml</DependentUpon>
     </Compile>
