@@ -168,7 +168,7 @@ namespace DivideToolControls.AnnotationControls
 			base.ControlName = base.AnnotationType + DateTime.Now.ToString("yyyyMMddHHmmss");
 		}
 
-		public void unload()
+		public void Unload()
 		{
 			base.msi.MouseLeftButtonDown -= MouseDown;
 		}

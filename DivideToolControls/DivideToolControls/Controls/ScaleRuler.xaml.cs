@@ -115,11 +115,11 @@ namespace DivideToolControls.Controls
             ScaleLabel_3.Content = Math.Round(num * 3.0, 2);
             ScaleLabel_4.Content = Math.Round(num * 4.0, 2);
             ScaleLabel_5.Content = Math.Round(num * 5.0, 2) + empty;
-            ScaleLabel_1.Margin = new Thickness(num2 * 1.0 - ControlHelper.GetMargin(Math.Round(num * 1.0, 2).ToString()), 10.0, 0.0, 0.0); // 刻度值的位置
-            ScaleLabel_2.Margin = new Thickness(num2 * 2.0 - ControlHelper.GetMargin(Math.Round(num * 2.0, 2).ToString()), 10.0, 0.0, 0.0);
-            ScaleLabel_3.Margin = new Thickness(num2 * 3.0 - ControlHelper.GetMargin(Math.Round(num * 3.0, 2).ToString()), 10.0, 0.0, 0.0);
-            ScaleLabel_4.Margin = new Thickness(num2 * 4.0 - ControlHelper.GetMargin(Math.Round(num * 4.0, 2).ToString()), 10.0, 0.0, 0.0);
-            ScaleLabel_5.Margin = new Thickness(num2 * 5.0 - ControlHelper.GetMargin(Math.Round(num * 5.0, 2).ToString()), 10.0, 0.0, 0.0);
+            ScaleLabel_1.Margin = new Thickness(num2 * 1.0 - ControlHelper.Instance.GetMargin(Math.Round(num * 1.0, 2).ToString()), 10.0, 0.0, 0.0); // 刻度值的位置
+            ScaleLabel_2.Margin = new Thickness(num2 * 2.0 - ControlHelper.Instance.GetMargin(Math.Round(num * 2.0, 2).ToString()), 10.0, 0.0, 0.0);
+            ScaleLabel_3.Margin = new Thickness(num2 * 3.0 - ControlHelper.Instance.GetMargin(Math.Round(num * 3.0, 2).ToString()), 10.0, 0.0, 0.0);
+            ScaleLabel_4.Margin = new Thickness(num2 * 4.0 - ControlHelper.Instance.GetMargin(Math.Round(num * 4.0, 2).ToString()), 10.0, 0.0, 0.0);
+            ScaleLabel_5.Margin = new Thickness(num2 * 5.0 - ControlHelper.Instance.GetMargin(Math.Round(num * 5.0, 2).ToString()), 10.0, 0.0, 0.0);
         }
 
         private void RuleThumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)

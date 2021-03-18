@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
 
 namespace DivideToolControls.Model
@@ -55,7 +56,6 @@ namespace DivideToolControls.Model
 
 
 
-
         public static Canvas Canvasboard { get; set; }
         public static FrameworkElement CurCtl { get; set; }
         public static AnnoListWind AnnoListWind { get; set; }
@@ -63,10 +63,18 @@ namespace DivideToolControls.Model
         public static Navmap Nav { get; set; }
         public static CtcList CtcWind { get; set; }
         public static Slider3D X3DSlider { get; set; }
+        public static ScaleRuler ScRuler { get; set; }
+        public static OperBall OpBall { get; set; }
+        public static Magnifier Magfier { get; set; }
         public static Grid LayoutBody { get; set; }
         //public static Path AnnoPath { get; set; }
         public static Grid Bg { get; set; }
         public static Canvas ZoomCanvas { get; set; }
+        public static RotateCtl RotCtl { get; set; }
+       
+        public static AnnoTools AnTools { get; set; }
+        public static Image ImgLabel { get; set; }
+        public static Canvas RectCans { get; set; }
         public static Action RefreshAction { get; set; }
 
     }

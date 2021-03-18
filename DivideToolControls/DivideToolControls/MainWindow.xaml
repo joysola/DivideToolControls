@@ -14,7 +14,7 @@
             <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <!--<ctl:TestAnnoBtnList/>-->
+            <ctl:AnnoTools x:Name="AnTools" />
         </StackPanel>
         <Grid x:Name="LayoutBody" Grid.Row="1">
             <Grid Name="OutBg" Background="#FFFFFFFF">
@@ -22,12 +22,17 @@
                     <Canvas Name="canvasboard" ZIndex="3" />
                 </Grid>
             </Grid>
+            <Canvas Name="RectCanvas" ZIndex="2" />
             <Canvas Name="ctccanvasboard" />
             <Canvas Name="Zoomcanvas" ZIndex="3" />
             <Label Name="lbl_Scale" Content="" HorizontalContentAlignment="Center" Width="90" FontSize="18" FontWeight="Bold" Margin="0,0,1,28" VerticalAlignment="Bottom" HorizontalAlignment="Right" BorderThickness="0" />
             <ctl:Navmap x:Name="nav"/>
             <ctl:Slider3D x:Name="x3dSlider"/>
             <ctl:ScaleRuler x:Name="SRuler"/>
+            <ctl:RotateCtl x:Name="RotCtl"/>
+            <ctl:OperBall x:Name="OpBall"/>
+            <ctl:Magnifier x:Name="Magfier"/>
+            <Image Name="Image_lable" Margin="10,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="2" Width="200" Height="200" Stretch="Fill" Visibility="Collapsed" />
         </Grid>
     </Grid>
 </Window>

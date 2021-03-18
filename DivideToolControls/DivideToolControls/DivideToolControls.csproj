@@ -57,6 +57,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock">
+      <HintPath>..\Lib\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\Lib\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
@@ -66,14 +69,34 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AnnotationControls\AnnoArrow.cs" />
     <Compile Include="AnnotationControls\AnnoDIYCtcRect.cs" />
+    <Compile Include="AnnotationControls\AnnoEllipse.cs" />
     <Compile Include="AnnotationControls\AnnoPin.cs" />
+    <Compile Include="AnnotationControls\AnnoPolyline.cs" />
+    <Compile Include="AnnotationControls\AnnoRect.cs" />
     <Compile Include="AnnotationControls\AnnoRectZoom.cs" />
     <Compile Include="AnnotationControls\AnnoTmaRect.cs" />
+    <Compile Include="Controls\AnnoTools.xaml.cs">
+      <DependentUpon>AnnoTools.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CtcList.xaml.cs">
       <DependentUpon>CtcList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Magnifier.xaml.cs">
+      <DependentUpon>Magnifier.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OperBall.xaml.cs">
+      <DependentUpon>OperBall.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RotateCtl.xaml.cs">
+      <DependentUpon>RotateCtl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helper\AnnoWindHelper.cs" />
+    <Compile Include="Helper\MathHelper.cs" />
+    <Compile Include="Helper\RotateHelper.cs" />
+    <Compile Include="Helper\XmlHelper.cs" />
+    <Compile Include="Model\AnnoBaseXml.cs" />
     <Compile Include="WinCtls\AnnoListWind.xaml.cs">
       <DependentUpon>AnnoListWind.xaml</DependentUpon>
     </Compile>
@@ -83,15 +106,31 @@
     <Compile Include="WinCtls\CtcViewer.xaml.cs">
       <DependentUpon>CtcViewer.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\AnnoTools.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\CtcList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Magnifier.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MessageWind.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Navmap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OperBall.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RotateCtl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

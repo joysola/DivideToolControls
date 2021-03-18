@@ -1,17 +1,21 @@
 ﻿using DivideToolControls.AnnotationControls;
 using DivideToolControls.Controls;
 using DivideToolControls.DeepZoom;
+using DivideToolControls.DeepZoomControls;
 using DivideToolControls.DynamicGeometry;
 using DivideToolControls.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace DivideToolControls.Helper
 {
@@ -153,13 +157,5 @@ namespace DivideToolControls.Helper
             ZoomModel.Curscale = zoom_ratio;
             refreshAction?.Invoke();
         }
-        public static void ReDraw()
-        {
-            foreach (AnnoBase item in ZoomModel.ObjList)
-            {
-                item.UpdateVisual();
-            }
-        }
-
     }
 }

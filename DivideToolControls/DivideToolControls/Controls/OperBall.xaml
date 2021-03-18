@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="DivideToolControls.Controls.OperBall"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DivideToolControls.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="100">
+    
+    <Grid x:Name="MGrid">
+        <Grid.Resources>
+            <Style x:Key="xThumb" TargetType="{x:Type Thumb}">
+                <Setter Property="Background" Value="#FF1F3B53" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="IsTabStop" Value="False" />
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFA3AEB9" Offset="0" />
+                            <GradientStop Color="#FF8399A9" Offset="0.375" />
+                            <GradientStop Color="#FF718597" Offset="0.375" />
+                            <GradientStop Color="#FF617584" Offset="1" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <Grid Name="grid">
+                                <Grid>
+                                    <Ellipse>
+                                        <Shape.Fill>
+                                            <RadialGradientBrush>
+                                                <GradientStop Color="White" Offset="0" />
+                                                <GradientStop Color="DeepSkyBlue" Offset="1" />
+                                            </RadialGradientBrush>
+                                        </Shape.Fill>
+                                    </Ellipse>
+                                </Grid>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+        <Canvas Name="Canvas_Operateball" VerticalAlignment="Top" HorizontalAlignment="Right" ZIndex="3" Opacity="0.9" Width="{Binding ElementName=MGrid, Path=ActualWidth}" Height="{Binding ElementName=MGrid,Path=ActualHeight}">
+            <FrameworkElement.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Name="Canvas_OperateballMenu" Click="Canvas_OperateballMenu_Click">
+                        <HeaderedItemsControl.Header>
+                            <Label Content="关闭" Foreground="#FFFFFFFF" />
+                        </HeaderedItemsControl.Header>
+                    </MenuItem>
+                </ContextMenu>
+            </FrameworkElement.ContextMenu>
+            <Ellipse Width="80" Height="80" StrokeThickness="2">
+                <Shape.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="White" Offset="0" />
+                        <GradientStop Color="Silver" Offset="1" />
+                    </RadialGradientBrush>
+                </Shape.Fill>
+            </Ellipse>
+            <Ellipse Width="40" Height="40" Fill="#FFFFFFFF" Canvas.Left="20" Canvas.Top="20"  Opacity="0.5" StrokeThickness="2" Stroke="#FFC0C0C0" />
+            <Canvas Width="100" Height="100">
+                <Thumb Name="myThumb" Width="40" Height="40" Canvas.Left="20" Canvas.Top="20" Style="{StaticResource xThumb}" DragDelta="myThumb_DragDelta" DragCompleted="myThumb_DragCompleted" />
+            </Canvas>
+        </Canvas>    
+    </Grid>
+</UserControl>

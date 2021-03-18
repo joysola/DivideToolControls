@@ -1,0 +1,208 @@
+﻿<UserControl x:Class="DivideToolControls.Controls.RotateCtl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DivideToolControls.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="GrayFill" Color="DeepSkyBlue" />
+            <SolidColorBrush x:Key="HandFill" Color="DeepSkyBlue" />
+            <SolidColorBrush x:Key="HandFill2" Color="DeepSkyBlue" />
+            <Style x:Key="Point" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="{StaticResource GrayFill}" />
+                <Setter Property="Width" Value="4" />
+                <Setter Property="Height" Value="60" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Rectangle Grid.Row="0" Fill="{TemplateBinding Background}" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <SolidColorBrush x:Key="LittleCircleFill" Color="#FFDEDEDE" />
+            <Style x:Key="BigCircle" TargetType="{x:Type Ellipse}">
+                <Setter Property="Width" Value="80" />
+                <Setter Property="Height" Value="80" />
+                <Setter Property="Fill" Value="#FF00BFFF" />
+            </Style>
+            <Style x:Key="LittleCircle" TargetType="{x:Type Ellipse}">
+                <Setter Property="Width" Value="60" />
+                <Setter Property="Height" Value="60" />
+                <Setter Property="Fill" Value="{StaticResource LittleCircleFill}" />
+            </Style>
+            <Style x:Key="SecondHand" TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="4" />
+                <Setter Property="Height" Value="50" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid Name="grdPanel" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Border CornerRadius="2" Background="{StaticResource HandFill}" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="xThumb" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" TargetType="{x:Type Thumb}">
+                <Setter Property="Background" Value="#FF1F3B53" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="IsTabStop" Value="False" />
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFA3AEB9" Offset="0" />
+                            <GradientStop Color="#FF8399A9" Offset="0.375" />
+                            <GradientStop Color="#FF718597" Offset="0.375" />
+                            <GradientStop Color="#FF617584" Offset="1" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <Grid Name="grid">
+                                <Grid>
+                                    <Ellipse>
+                                        <Shape.Fill>
+                                            <RadialGradientBrush>
+                                                <GradientStop Color="White" Offset="0" />
+                                                <GradientStop Color="DeepSkyBlue" Offset="1" />
+                                            </RadialGradientBrush>
+                                        </Shape.Fill>
+                                    </Ellipse>
+                                </Grid>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <FrameworkElement.ContextMenu>
+            <ContextMenu>
+                <MenuItem Click="MenuItem_Click">
+                    <HeaderedItemsControl.Header>
+                        <Label Content="关闭" Foreground="#FFFFFFFF" />
+                    </HeaderedItemsControl.Header>
+                </MenuItem>
+            </ContextMenu>
+        </FrameworkElement.ContextMenu>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
+        <Grid Row="1">
+            <Ellipse Style="{StaticResource BigCircle}">
+                <Shape.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="White" Offset="0" />
+                        <GradientStop Color="DeepSkyBlue" Offset="1" />
+                    </RadialGradientBrush>
+                </Shape.Fill>
+            </Ellipse>
+            <Ellipse Style="{StaticResource LittleCircle}">
+                <Shape.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="White" Offset="0" />
+                        <GradientStop Color="#FFDEDEDE" Offset="1" />
+                    </RadialGradientBrush>
+                </Shape.Fill>
+            </Ellipse>
+            <Ellipse Width="30" Height="30" Fill="#FF00BFFF" Panel.ZIndex="2" />
+            <Label Name="lbl_Angle" Width="30" Height="30" FontWeight="Bold" Content="0°" FontSize="9" Foreground="#FFFFFFFF" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Panel.ZIndex="2" 
+                   MouseDown="centerelp_MouseLeftButtonDown"/>
+            <Button Style="{StaticResource Point}">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="30" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Style="{StaticResource Point}">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="60" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Style="{StaticResource Point}" Background="{StaticResource HandFill2}">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="90" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Style="{StaticResource Point}">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="120" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Style="{StaticResource Point}">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="150" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Style="{StaticResource Point}" Background="{StaticResource HandFill2}" Cursor="Hand">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="180" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Style="{StaticResource Point}">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="210" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Style="{StaticResource Point}">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="240" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Style="{StaticResource Point}" Background="{StaticResource HandFill2}" Cursor="Hand">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="270" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Style="{StaticResource Point}">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="300" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Style="{StaticResource Point}">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="330" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Style="{StaticResource Point}" Background="{StaticResource HandFill2}" Cursor="Hand">
+                <UIElement.RenderTransform>
+                    <RotateTransform CenterX="1.5" CenterY="30" Angle="360" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Button Name="Btn_AngleLine" Style="{StaticResource SecondHand}" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" Panel.ZIndex="1">
+                <UIElement.RenderTransform>
+                    <RotateTransform Angle="0" />
+                </UIElement.RenderTransform>
+            </Button>
+            <Canvas ZIndex="2">
+                <Thumb Name="ThumbAngle" Width="15" Height="15" Canvas.Left="31.5" Canvas.Top="-2" Style="{StaticResource xThumb}" Cursor="Hand" 
+                       DragDelta="ThumbAngle_DragDelta"/>
+            </Canvas>
+            <Image Name="Rotate_Anticlockwise" Source="images\Shape_Rotate_Anticlockwise.png" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Visibility="Collapsed" 
+                   MouseLeftButtonDown="Rotate_Anticlockwise_MouseLeftButtonDown"/>
+            <Image Name="Rotate_Clockwise" Source="images\Shape_Rotate_Clockwise.png" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" 
+                   MouseLeftButtonDown="Rotate_Clockwise_MouseLeftButtonDown"/>
+            <Rectangle Fill="#FFDEDEDE" Width="10" Height="8" HorizontalAlignment="Left" Tag="270" Cursor="Hand" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" />
+            <Rectangle Fill="#FFDEDEDE" Width="10" Height="8" HorizontalAlignment="Right" Tag="90" Cursor="Hand" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" />
+            <Rectangle Fill="#FFDEDEDE" Width="10" Height="8" HorizontalAlignment="Center" VerticalAlignment="Top" Tag="0" Cursor="Hand" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" />
+            <Rectangle Fill="#FFDEDEDE" Width="10" Height="8" HorizontalAlignment="Center" VerticalAlignment="Bottom" Tag="180" Cursor="Hand" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" />
+        </Grid>
+    </Grid>
+</UserControl>

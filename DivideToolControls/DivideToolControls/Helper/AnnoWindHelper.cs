@@ -16,25 +16,23 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using Xceed.Wpf.AvalonDock.Layout;
 
 namespace DivideToolControls.Helper
 {
     public class AnnoWindHelper
     {
         public static AnnoWindHelper Instance { get; } = new AnnoWindHelper();
-        private Dictionary<int, AnnoDIYCtcRect> annoDiyCtcRectDic = new Dictionary<int, AnnoDIYCtcRect>();
+        public Dictionary<int, AnnoDIYCtcRect> AnnoDiyCtcRectDic { get; } = new Dictionary<int, AnnoDIYCtcRect>();
+
         public Visibility isAnnoManageWind = Visibility.Collapsed;
 
         private MultiScaleImage msi = ZoomModel.MulScaImg;
 
         private List<AnnoTmaRect> tmaObjList = new List<AnnoTmaRect>();
-        /// <summary>
-        /// Msi所有注册方法
-        /// </summary>
-        private Action _registerMsiEvents;
 
 
-        public void InitAnnoWinRegisterEvents(Action action)
+        public void InitAnnoWinRegisterEvents()
         {
             ZoomModel.AnnoListWind = new AnnoListWind();
             ZoomModel.AnnoListWind.Owner = Application.Current.MainWindow;
@@ -62,9 +60,8 @@ namespace DivideToolControls.Helper
             ZoomModel.AnnoListWind.CloseHandler += AnnoListWind_CloseHandler;
             ZoomModel.AnnoWind = new AnnoWind();
             ZoomModel.AnnoWind.Owner = Application.Current.MainWindow;
-            ZoomModel.AnnoWind._SaveAnno.Click += SaveAnno_Click;
-            ZoomModel.AnnoWind._CancelAnno.Click += CancelAnno_Click;
-            _registerMsiEvents = action;
+            //ZoomModel.AnnoWind._SaveAnno.Click += SaveAnno_Click;
+            //ZoomModel.AnnoWind._CancelAnno.Click += CancelAnno_Click;
         }
 
         private void mc_TextChanged(object sender, RoutedEventArgs e)
@@ -96,7 +93,7 @@ namespace DivideToolControls.Helper
             ZoomModel.AnnoListWind.ShowMs.IsChecked = ZoomModel.ObjList[selectedIndex].isMsVisble;
             ZoomModel.AnnoListWind._colorPicker.SelectedColor = ((SolidColorBrush)ZoomModel.ObjList[selectedIndex].BorderBrush).Color;
             ZoomModel.AnnoListWind.LineWidthComboBox.SelectedValue = ZoomModel.ObjList[selectedIndex].Size;
-            foreach (ComboBoxItem item2 in (IEnumerable)ZoomModel.AnnoListWind.LineWidthComboBox.Items)
+            foreach (ComboBoxItem item2 in ZoomModel.AnnoListWind.LineWidthComboBox.Items)
             {
                 if (item2.Content.Equals(ZoomModel.ObjList[selectedIndex].Size.ToString()))
                 {
@@ -352,7 +349,7 @@ namespace DivideToolControls.Helper
                 AnnoTmaRect myTmaRectangle2 = new AnnoTmaRect(ZoomModel.ALC, ZoomModel.Canvasboard, msi, ZoomModel.ObjList, ZoomModel.SlideZoom, ZoomModel.Calibration, tmaObjList);
                 myTmaRectangle2.DrawRect(left, top, width, height, (num4 + 1).ToString(), myTmaRectangle.AnnotationDescription);
             }
-            _registerMsiEvents?.Invoke();
+            MulScanImgHelper.Instance.RegisterMsiEvents(); //
             ZoomModel.Nav.IsHitTestVisible = true;
             ZoomModel.AnnoListWind.cbo_mc.SelectedIndex = -1;
         }
@@ -549,7 +546,7 @@ namespace DivideToolControls.Helper
                 double num6 = myDiyCtcRectangle.m_rectangle.Height * ZoomModel.SlideZoom / ZoomModel.Curscale;
                 double size = Math.Sqrt(num5 * num5 + num6 * num6) * ZoomModel.Calibration;
                 int num7 = ZoomModel.CtcWind.AddData((int)num3, (int)num4, (int)num5, (int)num6, size);
-                annoDiyCtcRectDic.Add(num7, myDiyCtcRectangle);
+                AnnoDiyCtcRectDic.Add(num7, myDiyCtcRectangle);
                 ZoomModel.AnnoWind._AnnotationBase.FontSize = num7;
                 ZoomModel.Nav.IsHitTestVisible = true;
             }
@@ -657,6 +654,67 @@ namespace DivideToolControls.Helper
             {
                 item.UpdateVisual();
             }
+        }
+
+        public void SetAnnoRadioButton(bool v)
+        {
+            ZoomModel.AnnoWind.Rad_1.IsEnabled = v;
+            ZoomModel.AnnoWind.Rad_2.IsEnabled = v;
+            ZoomModel.AnnoWind.Rad_3.IsEnabled = v;
+            ZoomModel.AnnoWind.Rad_4.IsEnabled = v;
+        }
+
+        public void FinishEvent(object sender, MouseEventArgs e)
+        {
+            MulScanImgHelper.Instance.RegisterMsiEvents(); //
+            ZoomModel.AnnoWind._AnnotationBase = (AnnoBase)sender;
+            if (ZoomModel.AnnoWind._AnnotationBase.OriginStart == ZoomModel.AnnoWind._AnnotationBase.OriginEnd && ZoomModel.AnnoWind._AnnotationBase.AnnotationType != AnnotationType.Remark)
+            {
+                ZoomModel.AnnoWind._AnnotationBase.DeleteItem();
+                ZoomModel.AnnoWind._AnnotationBase.AnnoControl.CB.SelectedIndex = -1;
+            }
+            else
+            {
+                ZoomModel.AnnoWind.AnnoName.Text = ZoomModel.AnnoWind._AnnotationBase.AnnotationName;
+                ZoomModel.AnnoWind.AnnoDes.Text = string.Empty;
+                ZoomModel.AnnoWind.tbk_info.Text = ZoomModel.AnnoWind._AnnotationBase.CalcMeasureInfo();
+                ZoomModel.AnnoWind._colorPicker.SelectedColor = Color.FromArgb(byte.MaxValue, 0, 0, byte.MaxValue);
+                ZoomModel.AnnoWind.LineWidthComboBox.SelectedIndex = 1;
+                ZoomModel.AnnoWind.Rad_1.IsChecked = true;
+                Point mainWindowPoint = GetMainWindowPoint();
+                //ZoomModel.AnnoWind.Top = mainWindowPoint.Y + (base.ActualHeight - ZoomModel.AnnoWind.Height) / 2.0;
+                //ZoomModel.AnnoWind.Left = mainWindowPoint.X + (base.ActualWidth - ZoomModel.AnnoWind.Width) / 2.0;
+                ZoomModel.AnnoWind.Top = mainWindowPoint.Y + (ZoomModel.Bg.ActualHeight - ZoomModel.AnnoWind.Height) / 2.0;
+                ZoomModel.AnnoWind.Left = mainWindowPoint.X + (ZoomModel.Bg.ActualWidth - ZoomModel.AnnoWind.Width) / 2.0;
+                ZoomModel.AnnoWind.ShowDialog();
+            }
+            ZoomModel.Nav.IsHitTestVisible = true;
+        }
+
+        private Point GetMainWindowPoint()
+        {
+            Point result = new Point(0.0, 0.0);
+            try
+            {
+                //result = TransformToAncestor(Application.Current.MainWindow).Transform(new Point(0.0, 0.0));
+                //result = Application.Current.MainWindow.TransformToAncestor(Application.Current.MainWindow).Transform(new Point(0.0, 0.0));
+                // ????????????????
+                var vec = VisualTreeHelper.GetOffset(Application.Current.MainWindow);
+                result = new Point(vec.X, vec.Y);
+            }
+            catch
+            {
+                foreach (KeyValuePair<object, object> item in Setting.TabsDic)
+                {
+                    if (item.Value == this)
+                    {
+                        result = new Point(((LayoutDocument)item.Key).FloatingLeft, ((LayoutDocument)item.Key).FloatingTop);
+                    }
+                }
+            }
+            result.Y += Application.Current.MainWindow.Top;
+            result.X += Application.Current.MainWindow.Left;
+            return result;
         }
     }
 }

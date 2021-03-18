@@ -178,7 +178,7 @@ namespace DivideToolControls.AnnotationControls
 			base.ControlName = base.AnnotationType + DateTime.Now.ToString("yyyyMMddHHmmss");
 		}
 
-		public void unload()
+		public void Unload()
 		{
 			base.msi.MouseLeftButtonDown -= MouseDown2;
 		}
@@ -290,7 +290,7 @@ namespace DivideToolControls.AnnotationControls
 			CreateThumb();
 			CreateNumBlock(i);
 			IsActive(Visibility.Collapsed);
-			unload();
+			Unload();
 			UpdateVisual();
 		}
 

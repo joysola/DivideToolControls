@@ -50,6 +50,13 @@ namespace DivideToolControls
             ZoomModel.LayoutBody = this.LayoutBody;
             ZoomModel.Canvasboard = this.canvasboard;
             ZoomModel.ZoomCanvas = this.Zoomcanvas;
+            ZoomModel.RotCtl = this.RotCtl;
+            ZoomModel.ImgLabel = this.Image_lable;
+            ZoomModel.RectCans = this.RectCanvas;
+            ZoomModel.Magfier = this.Magfier;
+            ZoomModel.AnTools = this.AnTools;
+            ZoomModel.ScRuler = this.SRuler;
+            ZoomModel.OpBall = this.OpBall;
             ZoomModel.RefreshAction = Refresh;
             MulScanImgHelper.Instance.InitAll(filePath);
         }
@@ -109,7 +116,7 @@ namespace DivideToolControls
             {
                 lbl_Scale.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
             }
-            ZoomHelper.ReDraw(); // 画Annotation
+            AnnoWindHelper.Instance.ReDraw(); // 画Annotation
             SRuler.UpdateRule(); // 刻度尺
             if (!_timer.IsEnabled)
             {

@@ -84,8 +84,10 @@
         <Border Name="CommandArea" Grid.Row="2" Style="{StaticResource DialogCommandAreaBorderStyle}" Margin="16,0,16,16" VerticalAlignment="Bottom" Height="52" CornerRadius="8">
             <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,14,0">
-                    <Button Name="_SaveAnno" Style="{StaticResource ButtonStyle}" IsDefault="True" HorizontalAlignment="Right" Width="60" Height="28" ScrollViewer.VerticalScrollBarVisibility="Disabled" Content="" />
-                    <Button Name="_CancelAnno" Style="{StaticResource ButtonStyle}" IsCancel="True" HorizontalAlignment="Right" Width="60" Height="28" Margin="5,0,0,0" ScrollViewer.VerticalScrollBarVisibility="Disabled" Content="" />
+                    <Button Name="_SaveAnno" Style="{StaticResource ButtonStyle}" IsDefault="True" HorizontalAlignment="Right" Width="60" Height="28" ScrollViewer.VerticalScrollBarVisibility="Disabled" Content="保存" 
+                            Click="SaveAnno_Click"/>
+                    <Button Name="_CancelAnno" Style="{StaticResource ButtonStyle}" IsCancel="True" HorizontalAlignment="Right" Width="60" Height="28" Margin="5,0,0,0" ScrollViewer.VerticalScrollBarVisibility="Disabled" Content="取消" 
+                            Click="CancelAnno_Click"/>
                 </StackPanel>
             </Grid>
         </Border>

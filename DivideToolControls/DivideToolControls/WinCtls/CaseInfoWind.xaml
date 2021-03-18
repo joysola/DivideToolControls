@@ -1,0 +1,66 @@
+﻿<Window x:Class="DivideToolControls.WinCtls.CaseInfoWind"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DivideToolControls.WinCtls"
+        mc:Ignorable="d"
+        WindowStyle="None" AllowsTransparency="True" 
+        Background="#00FFFFFF" 
+        ShowInTaskbar="False" WindowState="Normal" ResizeMode="NoResize" 
+        Title="CaseInfoWind" Height="650" Width="600" 
+        MouseLeftButtonDown="Window_MouseLeftButtonDown" KeyDown="Window_KeyDown">
+    <Grid Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="56" />
+            <RowDefinition Height="Auto" MinHeight="175" />
+            <RowDefinition Height="68" />
+        </Grid.RowDefinitions>
+        <Rectangle Grid.RowSpan="21" Grid.ColumnSpan="3" Style="{StaticResource DialogBackgroundRectangleStyle}" />
+        <Border Name="TitleArea" Grid.Row="0" Grid.ColumnSpan="3" Style="{StaticResource DialogTitleBorderStyle}" Margin="16,16,16,0" VerticalAlignment="Top">
+            <Label Style="{StaticResource DialogTitleLabelStyle}" Margin="4" Content="病例信息" />
+        </Border>
+        <Button Name="_CloseButton" Grid.Row="0" Grid.ColumnSpan="3" Style="{DynamicResource CloseButton2}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" Height="20" Margin="0,24,24,0" ToolTip="{Binding Path=LanguageResource[Close], Source={StaticResource Lang}}" Click="_CloseButton_Click" />
+        <Border Name="BodyArea" Grid.Row="1" Margin="16,0,16,0" Height="Auto">
+            <Grid Height="480" Margin="5">
+                <FlowDocumentReader ViewingMode="Scroll" IsFindEnabled="False" TextOptions.TextFormattingMode="Ideal" Foreground="#FF000000">
+                    <FlowDocument>
+                        <FrameworkContentElement.Resources>
+                            <ResourceDictionary>
+                                <Style x:Key="TitleStyleKey" TargetType="{x:Type Paragraph}">
+                                    <Setter Property="FontSize" Value="24" />
+                                </Style>
+                                <Style x:Key="Header1StyleKey" TargetType="{x:Type Paragraph}">
+                                    <Setter Property="FontSize" Value="18" />
+                                </Style>
+                                <Style x:Key="Header2StyleKey" TargetType="{x:Type Paragraph}">
+                                    <Setter Property="FontSize" Value="16" />
+                                </Style>
+                                <Style x:Key="Header3StyleKey" TargetType="{x:Type Paragraph}">
+                                    <Setter Property="FontSize" Value="14" />
+                                </Style>
+                                <Style x:Key="TextStyleKey" TargetType="{x:Type Paragraph}">
+                                    <Setter Property="FontSize" Value="16" />
+                                    <Setter Property="Paragraph.TextIndent" Value="24" />
+                                </Style>
+                                <Style x:Key="HyperlinkStyleKey" TargetType="{x:Type Hyperlink}">
+                                    <Setter Property="Foreground" Value="#FF000000" />
+                                </Style>
+                            </ResourceDictionary>
+                        </FrameworkContentElement.Resources>
+                        <Section>
+                            <Paragraph Name="_CaseInfo" Style="{StaticResource TextStyleKey}" FontFamily="Microsoft YaHei" />
+                        </Section>
+                    </FlowDocument>
+                </FlowDocumentReader>
+            </Grid>
+        </Border>
+        <Border Name="CommandArea" Grid.Row="2" Style="{StaticResource DialogCommandAreaBorderStyle}" Margin="16,0,16,16" VerticalAlignment="Bottom" Height="52" CornerRadius="8">
+            <Grid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,0">
+                    <Button Name="edit" Height="27" Width="75" Margin="5" Style="{StaticResource ButtonStyle}" Content="编辑病例" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

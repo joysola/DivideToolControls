@@ -86,7 +86,7 @@ namespace DivideToolControls.AnnotationControls
             base.AnnoControl.CB.SelectedIndex = -1;
         }
 
-        public void unload()
+        public void Unload()
         {
             base.msi.MouseLeftButtonDown -= MouseDown;
         }

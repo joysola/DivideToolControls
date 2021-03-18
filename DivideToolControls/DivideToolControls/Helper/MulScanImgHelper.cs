@@ -8,8 +8,10 @@ using DivideToolControls.WinCtls;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,7 +21,10 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Image = System.Windows.Controls.Image;
 using Path = System.Windows.Shapes.Path;
+using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 
 namespace DivideToolControls.Helper
 {
@@ -30,6 +35,8 @@ namespace DivideToolControls.Helper
         private MultiScaleImage msi = ZoomModel.MulScaImg;
         private List<int> touch = new List<int>();
 
+        private double fitx;
+        private double fity;
 
         private Point lastMouseDownPos;
         private Point lastMousePos;
@@ -41,13 +48,13 @@ namespace DivideToolControls.Helper
         private string TempFilename;
 
         private List<Image> ListImg = new List<Image>();
+        private AnnoRectZoom _annoRectZoom;
 
 
 
-   
         private Path _annoPath;
         public Path AnnoPath { get => _annoPath; set => _annoPath = value; }
-       
+
 
 
         public void InitAll(string filepath)
@@ -56,10 +63,15 @@ namespace DivideToolControls.Helper
             ZoomModel.Bg.Children.Add(msi);
             // MultiScaleImage的 ZoomableCanvas的 Scale或Offset属性变化时，通知回调
             LoadMsi(_filePath);
-            msi.Ini += msi_Ini;
+            msi.Ini += Msi_Init;
             RegisterMsiEvents();
             Setting.IsSynchronous = false;
-            AnnoWindHelper.Instance.InitAnnoWinRegisterEvents(RegisterMsiEvents);
+            AnnoWindHelper.Instance.InitAnnoWinRegisterEvents();
+            ZoomModel.X3DSlider.UpZ.MouseLeftButtonDown += UpZ_MouseLeftButtonDown;
+            ZoomModel.X3DSlider.DownZ.MouseLeftButtonDown += DownZ_MouseLeftButtonDown;
+            ZoomModel.Canvasboard.MouseRightButtonDown += msi_MouseRightButtonDown;
+            ZoomModel.LayoutBody.MouseMove += LayoutBody_MouseMove;
+            ZoomModel.Magfier.MagnifierScale = Setting.Magnifier;
             ZoomableCanvas.Refresh += (sender, e) =>
             {
                 ZoomModel.RefreshAction?.Invoke();
@@ -68,7 +80,7 @@ namespace DivideToolControls.Helper
 
 
 
-        private void RegisterMsiEvents()
+        public void RegisterMsiEvents()
         {
             msi.TouchUp += msi_TouchUp;
             msi.TouchMove += msi_TouchMove;
@@ -86,7 +98,7 @@ namespace DivideToolControls.Helper
             msi.ManipulationStarting += msi_ManipulationStarting;
             msi.ManipulationDelta += msi_ManipulationDelta;
         }
-        private void UnRegisterMsiEvents()
+        public void UnRegisterMsiEvents()
         {
             msi.MouseLeftButtonDown -= msi_MouseLeftButtonDown;
             msi.MouseMove -= msi_MouseMove;
@@ -357,7 +369,11 @@ namespace DivideToolControls.Helper
                 msi.ZoomableCanvas.ApplyAnimationClock(ZoomableCanvas.OffsetProperty, null);
             }
         }
-
+        /// <summary>
+        /// 需要修改
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void msi_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             // 右击菜单
@@ -420,23 +436,102 @@ namespace DivideToolControls.Helper
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void msi_Ini(object sender, RoutedEventArgs e)
+        private void Msi_Init(object sender, RoutedEventArgs e)
         {
             string filePath = _filePath;
 
             TempPath = filePath.Substring(0, filePath.LastIndexOf("\\") + 1);
             TempFilename = filePath.Substring(filePath.LastIndexOf("\\") + 1, filePath.Length - filePath.LastIndexOf("\\") - 1);
-
+            ZoomModel.Nav.SetThumbnail(ControlHelper.Instance.LoadImage(ZoomModel.InfoStruct.DataFilePTR, 8, 0, 0));
+            ZoomModel.ImgLabel.Source = ControlHelper.Instance.GetLable(ZoomModel.InfoStruct.DataFilePTR);
+            //ZoomModel.Nav.SetMultiScaleImage(msi);
             msi.Tag = "1";
             ZoomModel.ALC.CB = ZoomModel.AnnoListWind.cbo_mc;
             ZoomModel.ALC.Tbk = ZoomModel.AnnoListWind.tbk_info;
             ZoomModel.ALC.Tbx = ZoomModel.AnnoListWind.txt_xbz;
             ZoomModel.ALC.qsr = ZoomModel.AnnoListWind.txt_qsr;
 
+            if (File.Exists(TempPath + TempFilename + ".Ano"))
+            {
+                XmlHelper.Instance.LoadAnoXml(TempPath + TempFilename + ".Ano");
+                if (ZoomModel.ObjList.Count > 0)
+                {
+                    XmlHelper.Instance.IsChanged = true;
+                }
+            }
+            //if (File.Exists(TempPath + TempFilename + ".case"))
+            //{
+            //    LoadCaseXml(TempPath + TempFilename + ".case");
+            //}
+            _annoRectZoom = new AnnoRectZoom(ZoomModel.ALC, ZoomModel.RectCans, msi, ZoomModel.ObjList, ZoomModel.SlideZoom, ZoomModel.Calibration);
+            _annoRectZoom.RightZoom += m_RightZoom;
             ArcMenu();
             ZoomModel.Fitratio = ZoomModel.SlideZoom * msi.ZoomableCanvas.Scale;
-
+            fitx = msi.ZoomableCanvas.Offset.X;
+            fity = msi.ZoomableCanvas.Offset.Y;
             ZoomModel.RefreshAction?.Invoke();
+            string isLabel = Setting.IsLabel;
+            string isCase = Setting.IsCase;
+            string isNav = Setting.IsNav;
+            string isRule = Setting.IsRule;
+            string isMagnifier = Setting.IsMagnifier;
+            string isRotate = Setting.IsRotate;
+            string isOperateball = Setting.IsOperateball;
+            ZoomModel.Magfier.MagnifierScale = Setting.Magnifier;
+            if (isMagnifier == "1")
+            {
+                ZoomModel.Magfier.Visibility = Visibility.Visible;
+                ZoomModel.Magfier.Magnifiertimer.Start();
+            }
+            else
+            {
+                ZoomModel.Magfier.Visibility = Visibility.Collapsed;
+                ZoomModel.Magfier.Magnifiertimer.Stop();
+            }
+            if (isRotate == "1")
+            {
+                ZoomModel.RotCtl.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ZoomModel.RotCtl.Visibility = Visibility.Collapsed;
+            }
+            if (isOperateball == "1")
+            {
+                ZoomModel.OpBall.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ZoomModel.OpBall.Visibility = Visibility.Collapsed;
+            }
+            if (isLabel == "1")
+            {
+                ZoomModel.ImgLabel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ZoomModel.ImgLabel.Visibility = Visibility.Collapsed;
+            }
+            if (isNav == "1")
+            {
+                ZoomModel.Nav.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ZoomModel.Nav.Visibility = Visibility.Collapsed;
+            }
+            if (isRule == "1")
+            {
+                ZoomModel.ScRuler.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ZoomModel.ScRuler.Visibility = Visibility.Collapsed;
+            }
+            //if (isCase == "1")
+            //{
+            //    Show_CaseInfoWind(null, null);
+            //}
         }
 
         public void LoadMsi(string filename)
@@ -858,5 +953,70 @@ namespace DivideToolControls.Helper
             }
             ZoomHelper.ZoomRatio(zoom_ratio, msi, ZoomModel.RefreshAction);
         }
+
+        private void m_RightZoom(object sender, RoutedEventArgs e)
+        {
+            AnnoRectZoom annoRectZoom = sender as AnnoRectZoom;
+            double num = annoRectZoom.Scale;
+            double curscale = ZoomModel.Curscale;
+            curscale *= num;
+            if (curscale > (double)ZoomModel.SlideZoom * Setting.MaxMagValue)
+            {
+                curscale = (double)ZoomModel.SlideZoom * Setting.MaxMagValue;
+                num = curscale / ZoomModel.Curscale;
+            }
+            if (Setting.IsSynchronous)
+            {
+                foreach (KeyValuePair<object, object> item in Setting.TabsDic)
+                {
+                    SynMsi(ZoomModel.Curscale, annoRectZoom.pCenter, num);
+                }
+            }
+            Point pCenter = annoRectZoom.pCenter;
+            Point center = new Point(0.0, 0.0);
+            pCenter = new Point(pCenter.X - ZoomModel.LayoutBody.ActualWidth / 2.0, pCenter.Y - ZoomModel.LayoutBody.ActualHeight / 2.0);
+            Point point = KCommon.PointRotate(center, pCenter, ZoomModel.Rotate);
+            double x = point.X + msi.ActualWidth / 2.0;
+            double y = point.Y + msi.ActualHeight / 2.0;
+            pCenter = new Point(x, y);
+            double num2 = msi.ZoomableCanvas.Extent.Width * msi.ZoomableCanvas.Scale;
+            double num3 = msi.ZoomableCanvas.Extent.Height * msi.ZoomableCanvas.Scale;
+            double num4 = msi.ZoomableCanvas.Extent.Width * (curscale / ZoomModel.SlideZoom);
+            double num5 = msi.ZoomableCanvas.Extent.Height * (curscale / ZoomModel.SlideZoom);
+            Point point2 = new Point(pCenter.X + msi.ZoomableCanvas.Offset.X - num2 / 2.0, pCenter.Y + msi.ZoomableCanvas.Offset.Y - num3 / 2.0);
+            Point point3 = new Point(point2.X * num + num4 / 2.0 - pCenter.X - (msi.ActualWidth / 2.0 - pCenter.X), point2.Y * num + num5 / 2.0 - pCenter.Y - (msi.ActualHeight / 2.0 - pCenter.Y));
+            double scale = msi.ZoomableCanvas.Scale;
+            int level = msi.Source.GetLevel(curscale / ZoomModel.SlideZoom);
+            int currentLevel = msi._spatialSource.CurrentLevel;
+            if (level != currentLevel)
+            {
+                msi._spatialSource.CurrentLevel = level;
+            }
+            if (scale != curscale / ZoomModel.SlideZoom)
+            {
+                double num6 = 4.0;
+                TimeSpan timeSpan = TimeSpan.FromMilliseconds(num6 * 100.0);
+                CubicEase easingFunction = new CubicEase();
+                msi.ZoomableCanvas.BeginAnimation(ZoomableCanvas.ScaleProperty, new DoubleAnimation(curscale / (double)ZoomModel.SlideZoom, timeSpan)
+                {
+                    EasingFunction = easingFunction
+                }, HandoffBehavior.Compose);
+                msi.ZoomableCanvas.BeginAnimation(ZoomableCanvas.OffsetProperty, new PointAnimation(new Point(point3.X, point3.Y), timeSpan)
+                {
+                    EasingFunction = easingFunction
+                }, HandoffBehavior.Compose);
+            }
+            else
+            {
+                msi.ZoomableCanvas.Offset = new Point(point3.X, point3.Y);
+                msi.ZoomableCanvas.ApplyAnimationClock(ZoomableCanvas.OffsetProperty, null);
+            }
+        }
+
+        private void LayoutBody_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+           ZoomModel.Magfier.MagnifierMovePoint = e.GetPosition(ZoomModel.LayoutBody);
+        }
+
     }
 }
