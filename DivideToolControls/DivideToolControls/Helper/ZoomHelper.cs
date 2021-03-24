@@ -52,7 +52,11 @@ namespace DivideToolControls.Helper
         0.3,
         0.2
         };
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="curMagV">当前CurScale</param>
+        /// <returns></returns>
         public static double GetMagAdjValueByCurMag(double curMagV)
         {
             double result = 0.0;
@@ -71,10 +75,10 @@ namespace DivideToolControls.Helper
             return result;
         }
 
-        private static double CalcFixValueY(double x1, double x2, double y1, double y2, double x)
+        private static double CalcFixValueY(double x1, double x2, double y1, double y2, double curMagV)
         {
             double num = x2 - x1;
-            double num2 = x2 - x;
+            double num2 = x2 - curMagV;
             double num3 = y2 - y1;
             double num4 = num3 * num2 / (1.0 * num);
             return y2 - num4;

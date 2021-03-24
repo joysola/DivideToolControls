@@ -271,6 +271,7 @@ namespace DivideToolControls.Helper
                 Setting.Opacity = 1;
                 ZoomModel.IsDw = false;
                 double num2 = 1.0;
+                // Setting.MargPara = Setting.Calibration40 或 .Calibration20;
                 double num3 = Setting.MaxMagValue * ZoomModel.SlideZoom * Setting.MargPara;
                 num2 = ZoomHelper.CalcSpeed(num);
                 ZoomModel.PrevTimeStap = e.Timestamp;
@@ -278,7 +279,9 @@ namespace DivideToolControls.Helper
                 if (curscale == ZoomModel.PrevNewzoom || !(ZoomModel.PrevTimeStap > 1E-08))
                 {
                     double magAdjValueByCurMag = ZoomHelper.GetMagAdjValueByCurMag(ZoomModel.Curscale);
-                    curscale = ((e.Delta <= 0) ? (curscale - magAdjValueByCurMag * num2) : (curscale + magAdjValueByCurMag * num2));
+                    // 根据滚轮判断是放大还是缩小
+                    curscale = e.Delta <= 0 ? curscale - magAdjValueByCurMag * num2 : curscale + magAdjValueByCurMag * num2;
+                    // ZoomModel.Fitratio = ZoomModel.SlideZoom * msi.ZoomableCanvas.Scale;
                     if (curscale < ZoomModel.Fitratio)
                     {
                         curscale = ZoomModel.Fitratio;
@@ -584,7 +587,7 @@ namespace DivideToolControls.Helper
             }
             //msi.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, TileSize, 0, InfoStruct, khiScanScale, msi);
             msi.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, ZoomModel.TileSize, 0, ZoomModel.InfoStruct, khiScanScale, msi, filename);
-            if ((double)khiImageCapRes == 0.0)
+            if (khiImageCapRes == 0.0)
             {
                 switch (khiScanScale)
                 {
@@ -1015,7 +1018,7 @@ namespace DivideToolControls.Helper
 
         private void LayoutBody_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-           ZoomModel.Magfier.MagnifierMovePoint = e.GetPosition(ZoomModel.LayoutBody);
+            ZoomModel.Magfier.MagnifierMovePoint = e.GetPosition(ZoomModel.LayoutBody);
         }
 
     }
