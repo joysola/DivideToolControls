@@ -12,6 +12,9 @@ using System.Windows.Threading;
 
 namespace DivideToolControls.DeepZoomControls
 {
+	/// <summary>
+	/// 虚拟化是指数据源没有完全加载，仅加载当前需要显示的数据呈现给用户
+	/// </summary>
 	public abstract class VirtualPanel : VirtualizingPanel
 	{
 		private class VirtualItemsList : IList, ICollection, IEnumerable

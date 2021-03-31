@@ -558,7 +558,8 @@ namespace DivideToolControls.Controls
 
         public void UpdateThumbnailRect()
         {
-            if (m_MultiScaleImage != null && !m_IsDragging && m_OrgWidth > 0)
+            if (m_MultiScaleImage != null && !m_IsDragging && m_OrgWidth > 0
+                )
             {
                 Rect thumbnailRect = GetThumbnailRect(m_OrgWidth);
                 ChangeRectLocation(thumbnailRect.X, thumbnailRect.Y, thumbnailRect.Width, thumbnailRect.Height);

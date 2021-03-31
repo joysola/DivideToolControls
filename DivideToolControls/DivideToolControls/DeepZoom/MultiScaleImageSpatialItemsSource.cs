@@ -72,7 +72,7 @@ namespace DivideToolControls.DeepZoom
 				VisualTile tileVm = new VisualTile(tile, _tileSource);
 				object tileLayers = _tileSource.GetTileLayers(tile.Level, tile.Column, tile.Row);
 				Uri uri = tileLayers as Uri;
-				if (uri != null)
+				if (uri != null) // 网络地址
 				{
 					CancellationToken token = _currentCancellationTokenSource.Token;
 					Task.Factory.StartNew(delegate
@@ -91,7 +91,7 @@ namespace DivideToolControls.DeepZoom
 						}
 					}, TaskContinuationOptions.OnlyOnRanToCompletion);
 				}
-				else
+				else // stream 流
 				{
 					Stream stream = tileLayers as Stream;
 					if (stream == null)

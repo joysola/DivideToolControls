@@ -79,13 +79,16 @@ namespace DivideToolControls
 
         public void Refresh()
         {
+            
             if (msi.ZoomableCanvas == null)
             {
                 return;
             }
-            ZoomModel.Curscale = msi.ZoomableCanvas.Scale * (double)ZoomModel.SlideZoom;
+            
+            ZoomModel.Curscale = msi.ZoomableCanvas.Scale * ZoomModel.SlideZoom;
+            
             nav.UpdateThumbnailRect();
-            nav.DrawRect(msi.ZoomableCanvas.Scale * (double)ZoomModel.SlideZoom);
+            nav.DrawRect(msi.ZoomableCanvas.Scale * ZoomModel.SlideZoom);
             double num = 0.0;
             if (ZoomModel.SlideZoom == 40)
             {
@@ -99,16 +102,16 @@ namespace DivideToolControls
             {
                 num = 1.0;
             }
-            double num2 = msi.ZoomableCanvas.Scale * (double)ZoomModel.SlideZoom;
+            double num2 = msi.ZoomableCanvas.Scale * ZoomModel.SlideZoom;
             num2 /= num;
             double num3 = Math.Round(num2, 2);
-            if (num3 >= (double)(ZoomModel.SlideZoom * (int)Setting.MaxMagValue))
+            if (num3 >= (ZoomModel.SlideZoom * (int)Setting.MaxMagValue))
             {
                 num3 = ZoomModel.SlideZoom * (int)Setting.MaxMagValue;
             }
-            lbl_Scale.Content = Math.Round(num3, 2) + "X";
-            ZoomModel.PrevNewzoom = msi.ZoomableCanvas.Scale * (double)ZoomModel.SlideZoom;
-            if (num2 > (double)ZoomModel.SlideZoom)
+            lbl_Scale.Content = Math.Round(num3, 2) + "X"; // 显示实时倍率
+            ZoomModel.PrevNewzoom = msi.ZoomableCanvas.Scale * ZoomModel.SlideZoom;
+            if (num2 > ZoomModel.SlideZoom)
             {
                 lbl_Scale.Foreground = new SolidColorBrush(Color.FromRgb(byte.MaxValue, 0, 0));
             }
@@ -117,7 +120,7 @@ namespace DivideToolControls
                 lbl_Scale.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
             }
             AnnoWindHelper.Instance.ReDraw(); // 画Annotation
-            SRuler.UpdateRule(); // 刻度尺
+            this.Dispatcher.InvokeAsync(() => SRuler.UpdateRule());// 刻度尺
             if (!_timer.IsEnabled)
             {
                 _timer.IsEnabled = true;

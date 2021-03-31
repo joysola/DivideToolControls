@@ -19,8 +19,13 @@ namespace DivideToolControls.DeepZoom
 		public double OffsetX;
 
 		public double OffsetY;
-
+		/// <summary>
+		/// 最大层数
+		/// </summary>
 		private int _maxLevel;
+		/// <summary>
+		/// 最大层数（移出时可能小一点）
+		/// </summary>
 
 		private int _zoomLimitLevel;
 
@@ -31,7 +36,9 @@ namespace DivideToolControls.DeepZoom
 		private readonly IList<int> _columnCounts = new List<int>();
 
 		private readonly IList<double> _levelScales = new List<double>();
-
+		/// <summary>
+		/// 总的图像大小
+		/// </summary>
 		public Size ImageSize
 		{
 			get;
@@ -96,21 +103,30 @@ namespace DivideToolControls.DeepZoom
 			int num2 = (row != 0) ? TileOverlap : 0;
 			return new Point(column * TileSize - num, row * TileSize - num2);
 		}
-
+		/// <summary>
+		/// 根据 缩放倍率 获取瓦片图所在的层数
+		/// </summary>
+		/// <param name="scaleRatio">缩放倍率</param>
+		/// <returns>瓦片图层数</returns>
 		public int GetLevel(double scaleRatio)
 		{
 			int value = _maxLevel + (int)Math.Log(scaleRatio, 2.0);
 			return value.Clamp(0, _zoomLimitLevel);
 		}
-
+		/// <summary>
+		/// 根据控件尺寸确定所在层数
+		/// </summary>
+		/// <param name="viewportWidth"></param>
+		/// <param name="viewportHeight"></param>
+		/// <returns></returns>
 		internal int GetLevel(double viewportWidth, double viewportHeight)
 		{
-			double num = ImageSize.Width / ImageSize.Height;
-			double num2 = viewportWidth / viewportHeight;
+			double num = ImageSize.Width / ImageSize.Height; // 图像长宽比
+			double num2 = viewportWidth / viewportHeight; // 图像所在控件长宽比
 			int i = 0;
 			if (num2 > num)
 			{
-				for (; ImageSizeAtLevel(i).Height < viewportHeight && i < _zoomLimitLevel; i++)
+				for (; ImageSizeAtLevel(i).Height < viewportHeight && i < _zoomLimitLevel; i++) // 取最接近图像高度的，所在层数高度
 				{
 				}
 			}
@@ -122,7 +138,11 @@ namespace DivideToolControls.DeepZoom
 			}
 			return i;
 		}
-
+		/// <summary>
+		/// 获取层的缩放倍率
+		/// </summary>
+		/// <param name="level"></param>
+		/// <returns></returns>
 		internal double ScaleAtLevel(int level)
 		{
 			if (_levelScales.Count > level)
@@ -131,7 +151,11 @@ namespace DivideToolControls.DeepZoom
 			}
 			return Math.Pow(0.5, _maxLevel - level);
 		}
-
+		/// <summary>
+		/// 获取指定层下的图像尺寸
+		/// </summary>
+		/// <param name="level"></param>
+		/// <returns></returns>
 		internal Size ImageSizeAtLevel(int level)
 		{
 			double num = ScaleAtLevel(level);
@@ -159,7 +183,7 @@ namespace DivideToolControls.DeepZoom
 			{
 				return _columnCounts[level];
 			}
-			return (int)Math.Ceiling(ImageSizeAtLevel(level).Width / (double)TileSize);
+			return (int)Math.Ceiling(ImageSizeAtLevel(level).Width / TileSize); // 指定层 除以瓦片尺寸，得出需要的个数
 		}
 
 		internal int RowsAtLevel(int level)
@@ -168,7 +192,7 @@ namespace DivideToolControls.DeepZoom
 			{
 				return _rowCounts[level];
 			}
-			return (int)Math.Ceiling(ImageSizeAtLevel(level).Height / (double)TileSize);
+			return (int)Math.Ceiling(ImageSizeAtLevel(level).Height / TileSize); // 指定层 除以瓦片尺寸，得出需要的个数
 		}
 
 		internal int GetTileIndex(Tile tile)
@@ -228,7 +252,7 @@ namespace DivideToolControls.DeepZoom
 
 		protected static int GetMaximumLevel(double width, double height)
 		{
-			return (int)Math.Ceiling(Math.Log(Math.Max(width, height), 2.0));
+			return (int)Math.Ceiling(Math.Log(Math.Max(width, height), 2.0)); // log2的结果
 		}
 
 		protected int TilesAtLevel(int level)

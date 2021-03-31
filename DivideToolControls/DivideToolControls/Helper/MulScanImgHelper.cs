@@ -73,6 +73,8 @@ namespace DivideToolControls.Helper
             ZoomModel.LayoutBody.MouseMove += LayoutBody_MouseMove;
             ZoomModel.Magfier.MagnifierScale = Setting.Magnifier;
             ZoomableCanvas.Refresh += (sender, e) =>
+            
+            
             {
                 ZoomModel.RefreshAction?.Invoke();
             };
@@ -272,14 +274,14 @@ namespace DivideToolControls.Helper
                 ZoomModel.IsDw = false;
                 double num2 = 1.0;
                 // Setting.MargPara = Setting.Calibration40 或 .Calibration20;
-                double num3 = Setting.MaxMagValue * ZoomModel.SlideZoom * Setting.MargPara;
+                double num3 = Setting.MaxMagValue * ZoomModel.SlideZoom * Setting.MargPara; // 最大极限倍率
                 num2 = ZoomHelper.CalcSpeed(num);
                 ZoomModel.PrevTimeStap = e.Timestamp;
                 double curscale = ZoomModel.Curscale;
                 if (curscale == ZoomModel.PrevNewzoom || !(ZoomModel.PrevTimeStap > 1E-08))
                 {
-                    double magAdjValueByCurMag = ZoomHelper.GetMagAdjValueByCurMag(ZoomModel.Curscale);
-                    // 根据滚轮判断是放大还是缩小
+                    double magAdjValueByCurMag = ZoomHelper.GetMagAdjValueByCurMag(ZoomModel.Curscale); // 获取缩放步长
+                    // 根据滚轮判断是放大还是缩小(Delta>0 倍率增大、放大；Delta<0 倍率减少、缩小)
                     curscale = e.Delta <= 0 ? curscale - magAdjValueByCurMag * num2 : curscale + magAdjValueByCurMag * num2;
                     // ZoomModel.Fitratio = ZoomModel.SlideZoom * msi.ZoomableCanvas.Scale;
                     if (curscale < ZoomModel.Fitratio)
@@ -586,7 +588,7 @@ namespace DivideToolControls.Helper
                 ZoomModel.TileSize = 256;
             }
             //msi.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, TileSize, 0, InfoStruct, khiScanScale, msi);
-            msi.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, ZoomModel.TileSize, 0, ZoomModel.InfoStruct, khiScanScale, msi, filename);
+            msi.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, ZoomModel.TileSize, 0, ZoomModel.InfoStruct, khiScanScale, msi, filename); // 关键
             if (khiImageCapRes == 0.0)
             {
                 switch (khiScanScale)

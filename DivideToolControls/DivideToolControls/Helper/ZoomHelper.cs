@@ -53,7 +53,7 @@ namespace DivideToolControls.Helper
         0.2
         };
         /// <summary>
-        /// 
+        /// 获取缩放步长
         /// </summary>
         /// <param name="curMagV">当前CurScale</param>
         /// <returns></returns>
@@ -112,7 +112,15 @@ namespace DivideToolControls.Helper
             }
             return num;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="zoom_ratio">需要缩放成为的倍率</param>
+        /// <param name="x">鼠标在控件中的x坐标</param>
+        /// <param name="y">鼠标在控件中的y坐标</param>
+        /// <param name="LayoutBody"></param>
+        /// <param name="msi"></param>
+        /// <param name="refreshAction"></param>
         public static void ZoomRatio(double zoom_ratio, double x, double y, Grid LayoutBody, MultiScaleImage msi, Action refreshAction = null)
         {
             double num = 0.0;
@@ -135,9 +143,9 @@ namespace DivideToolControls.Helper
             double x2 = point2.X + msi.ActualWidth / 2.0;
             double y2 = point2.Y + msi.ActualHeight / 2.0;
             Point elementPoint = new Point(x2, y2);
-            Point point3 = msi.ElementToLogicalPoint(elementPoint);
+            Point point3 = msi.ElementToLogicalPoint(elementPoint); // 控件坐标转图像坐标后， 坐标 ÷ 尺寸
             msi.ZoomAboutLogicalPoint(zoom_ratio / ZoomModel.Curscale, point3.X, point3.Y);
-            ZoomModel.Curscale = zoom_ratio;
+            ZoomModel.Curscale = zoom_ratio; // 更新 当前倍率 为 现期倍率
             refreshAction?.Invoke();
         }
         public static void ZoomRatio(double zoom_ratio, MultiScaleImage msi, Action refreshAction)

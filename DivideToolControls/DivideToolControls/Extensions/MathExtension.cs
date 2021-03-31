@@ -163,7 +163,13 @@ namespace DivideToolControls.Extensions
 			}
 			return Math.Min(Math.Max(value, a), b);
 		}
-
+		/// <summary>
+		/// value 、a 、b取大小中间的
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
 		public static double Clamp(this double value, double a, double b)
 		{
 			if (!(a < b))
@@ -190,7 +196,13 @@ namespace DivideToolControls.Extensions
 			}
 			return Math.Min(Math.Max(value, a), b);
 		}
-
+		/// <summary>
+		/// 取中间大小
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
 		public static int Clamp(this int value, int a, int b)
 		{
 			if (a >= b)

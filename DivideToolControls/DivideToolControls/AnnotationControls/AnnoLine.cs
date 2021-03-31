@@ -214,7 +214,7 @@ namespace DivideToolControls.AnnotationControls
             base.MTextBlock.Visibility = Visibility.Collapsed;
             base.MTextBlock.MaxWidth = 150.0;
             base.MTextBlock.TextWrapping = TextWrapping.Wrap;
-            base.MTextBlock.Text = CalcMeasureInfo();
+            base.MTextBlock.Text = CalcMeasureInfo(); // 标记信息
             base.MTextBlock.SetValue(Canvas.LeftProperty, ALine.X2);
             base.MTextBlock.SetValue(Canvas.TopProperty, ALine.Y2);
             M_FiguresCanvas.Children.Add(base.MTextBlock);
@@ -247,7 +247,10 @@ namespace DivideToolControls.AnnotationControls
                 ThumbMove.DragDelta += ThumbMove_DragDelta;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string CalcMeasureInfo()
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -268,7 +271,7 @@ namespace DivideToolControls.AnnotationControls
             }
             if (base.isVisble == Visibility.Visible)
             {
-                stringBuilder.Append(Setting.xLength + GetLength() + Setting.Unit);
+                stringBuilder.Append(Setting.xLength + GetLength() + Setting.Unit); // 线的实际长度
             }
             return stringBuilder.ToString();
         }

@@ -269,7 +269,9 @@ namespace DivideToolControls.DeepZoomControls
 				SetValue(StretchDirectionProperty, value);
 			}
 		}
-
+		/// <summary>
+		/// 控件坐标的偏移
+		/// </summary>
 		public Point Offset
 		{
 			get
@@ -398,7 +400,12 @@ namespace DivideToolControls.DeepZoomControls
 		double IScrollInfo.VerticalOffset => Math.Max(ActualViewbox.Y - Extent.Y, 0.0) * Scale;
 
 		public static event DependencyPropertyChangedEventHandler Refresh;
-
+		/// <summary>
+		/// 加入Transform(ScaleTransform、TranslateTransform)
+		/// </summary>
+		/// <param name="d"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		private static object CoerceRenderTransform(DependencyObject d, object value)
 		{
 			ZoomableCanvas zoomableCanvas = d as ZoomableCanvas;
@@ -922,7 +929,11 @@ namespace DivideToolControls.DeepZoomControls
 				InvalidateArrange();
 			}
 		}
-
+		/// <summary>
+		/// 在派生类中重写时，测量子元素在布局中所需的大小，并确定由 FrameworkElement 派生的类的大小。
+		/// </summary>
+		/// <param name="availableSize">此元素可提供给子元素的可用大小。 可指定无穷大作为一个值，该值指示元素将调整到适应内容的大小。</param>
+		/// <returns>此元素基于其对子元素大小的计算确定它在布局期间所需要的大小。</returns>
 		protected override Size MeasureOverride(Size availableSize)
 		{
 			Size availableSize2 = new Size(double.PositiveInfinity, double.PositiveInfinity);
@@ -941,7 +952,11 @@ namespace DivideToolControls.DeepZoomControls
 			}
 			return default(Size);
 		}
-
+		/// <summary>
+		/// 在派生类中重写时，为 FrameworkElement 派生类定位子元素并确定大小。
+		/// </summary>
+		/// <param name="finalSize">父级中应使用此元素排列自身及其子元素的最终区域。</param>
+		/// <returns>使用的实际大小。</returns>
 		protected override Size ArrangeOverride(Size finalSize)
 		{
 			bool applyTransform = ApplyTransform;
@@ -994,12 +1009,20 @@ namespace DivideToolControls.DeepZoomControls
 			ComputedExtent = Rect.Empty;
 			((IScrollInfo)this).ScrollOwner?.InvalidateScrollInfo();
 		}
-
+		/// <summary>
+		/// 图像坐标 转 控件坐标
+		/// </summary>
+		/// <param name="canvasPoint">图像坐标</param>
+		/// <returns>控件坐标</returns>
 		public Point GetVisualPoint(Point canvasPoint)
 		{
 			return (Point)((Vector)canvasPoint * Scale - (Vector)Offset);
 		}
-
+		/// <summary>
+		/// 控件坐标 转 图像坐标
+		/// </summary>
+		/// <param name="screenPoint">控件坐标</param>
+		/// <returns>图像坐标</returns>
 		public Point GetCanvasPoint(Point screenPoint)
 		{
 			return (Point)(((Vector)Offset + (Vector)screenPoint) / Scale);
