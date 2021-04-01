@@ -68,7 +68,9 @@ namespace DivideToolControls.DeepZoom
 			TileOverlap = tileOverlap;
 			InitializeTileSource();
 		}
-
+		/// <summary>
+		/// 初始化瓦片元数据
+		/// </summary>
 		internal void InitializeTileSource()
 		{
 			_maxLevel = GetMaximumLevel(ImageSize.Width, ImageSize.Height);
@@ -228,7 +230,9 @@ namespace DivideToolControls.DeepZoom
 			}
 			return new Tile(level, num5, num4);
 		}
-
+		/// <summary>
+		/// 计算每层的行列、偏移、缩放倍率等
+		/// </summary>
 		protected void CalculateLevelOffsets()
 		{
 			int num = 0;
