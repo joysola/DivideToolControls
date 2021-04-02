@@ -828,7 +828,7 @@ namespace DivideToolControls.DeepZoomControls
 			{
 				Rect actualViewbox = ActualViewbox;
 				int realizationLimit = RealizationLimit;
-				actualViewbox.Inflate(actualViewbox.Width / 10.0, actualViewbox.Height / 10.0);
+				actualViewbox.Inflate(actualViewbox.Width / 10.0, actualViewbox.Height / 10.0); // 缩小actualViewbox尺寸
 				query = SpatialIndex.Query(actualViewbox).Take(realizationLimit);
 			}
 			else

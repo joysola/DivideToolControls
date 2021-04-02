@@ -414,7 +414,11 @@ namespace DivideToolControls.DeepZoomControls
 		protected virtual void OnItemsChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
 		}
-
+		/// <summary>
+		/// 将瓦片图放入InternalChildren
+		/// </summary>
+		/// <param name="itemIndex"></param>
+		/// <returns></returns>
 		public UIElement RealizeItem(int itemIndex)
 		{
 			IItemContainerGenerator itemContainerGenerator = base.ItemContainerGenerator;

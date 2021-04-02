@@ -43,7 +43,7 @@ namespace DivideToolControls
 
         private void InitTest()
         {
-            ZoomModel.CurCtl = this;
+            ZoomModel.CurCtl = this.Bg; // 必须是MultiScaleImage所在的控件！不能是其他，否则鼠标会偏移
             ZoomModel.Bg = this.Bg;
             ZoomModel.Nav = this.nav;
             ZoomModel.X3DSlider = this.x3dSlider;

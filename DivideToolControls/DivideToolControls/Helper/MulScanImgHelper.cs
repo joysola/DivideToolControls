@@ -73,8 +73,8 @@ namespace DivideToolControls.Helper
             ZoomModel.LayoutBody.MouseMove += LayoutBody_MouseMove;
             ZoomModel.Magfier.MagnifierScale = Setting.Magnifier;
             ZoomableCanvas.Refresh += (sender, e) =>
-            
-            
+
+
             {
                 ZoomModel.RefreshAction?.Invoke();
             };
@@ -588,7 +588,14 @@ namespace DivideToolControls.Helper
                 ZoomModel.TileSize = 256;
             }
             //msi.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, TileSize, 0, InfoStruct, khiScanScale, msi);
-            msi.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, ZoomModel.TileSize, 0, ZoomModel.InfoStruct, khiScanScale, msi, filename); // 关键
+            //msi.Source = new MagicZoomTileSource1(khiImageWidth, khiImageHeight, ZoomModel.TileSize, 0, ZoomModel.InfoStruct, khiScanScale, msi, filename); // 关键
+
+            // 测试
+            int ww = (int)Math.Ceiling(256.95 * 256);
+            int hh = (int)247.48 * 256;
+            // 65792、63488
+            msi.Source = new MagicZoomTileSource1(ww, hh, ZoomModel.TileSize, 0, ZoomModel.InfoStruct, khiScanScale, msi, filename); // 关键
+
             if (khiImageCapRes == 0.0)
             {
                 switch (khiScanScale)
@@ -603,7 +610,10 @@ namespace DivideToolControls.Helper
             }
             else
             {
-                ZoomModel.Calibration = khiImageCapRes;
+                //ZoomModel.Calibration = khiImageCapRes;
+                // 测试
+                //ZoomModel.Calibration = 0.1662992;
+                ZoomModel.Calibration = 0.24;
                 if (khiScanScale == 40)
                 {
                     if (Setting.Calibration40 != 1.0)
@@ -627,9 +637,12 @@ namespace DivideToolControls.Helper
                     }
                 }
             }
-            ZoomModel.SlideZoom = khiScanScale;
-            ZoomModel.ImageW = khiImageWidth;
-            ZoomModel.ImageH = khiImageHeight;
+            //ZoomModel.SlideZoom = khiScanScale;
+            //ZoomModel.ImageW = khiImageWidth;
+            //ZoomModel.ImageH = khiImageHeight;
+            ZoomModel.SlideZoom = 40;
+            ZoomModel.ImageW = ww;
+            ZoomModel.ImageH = hh;
         }
 
 
@@ -859,6 +872,9 @@ namespace DivideToolControls.Helper
                 msi.ZoomableCanvas.ApplyAnimationClock(ZoomableCanvas.OffsetProperty, null);
             }
         }
+        /// <summary>
+        /// 标记
+        /// </summary>
         private void ArcMenu()
         {
             if (AnnoPath != null)

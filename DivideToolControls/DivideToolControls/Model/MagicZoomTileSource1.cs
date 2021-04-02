@@ -2,6 +2,7 @@
 using DivideToolControls.Helper;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -50,6 +51,11 @@ namespace DivideToolControls.Model
         private bool isopenhsl;
 
         private string kfbName;
+
+        /// <summary>
+        /// 测试用
+        /// </summary>
+        private string imgDir = @"K:\Test\DivideToolControls\DivideToolControls\Doc\411681C03200807002\";
 
         public MagicZoomTileSource1(int imageWidth, int imageHeight, int tileWidth, int overlap, IMAGE_INFO_STRUCT infoStruct, float zoom, MultiScaleImage msi)
             : base(imageWidth, imageHeight, tileWidth, overlap)
@@ -106,19 +112,66 @@ namespace DivideToolControls.Model
             sp = p_sp;
         }
 
+        //protected internal override object GetTileLayers(int tileLevel, int tilePositionX, int tilePositionY)
+        //{
+        //    if (tileLevel > 8)
+        //    {
+        //        if (InfoStruct.DataFilePTR > 0)
+        //        {
+        //            return LoadImage(InfoStruct.DataFilePTR, tileLevel, tilePositionX, tilePositionY);
+        //        }
+        //        return null;
+        //    }
+        //    return null;
+        //}
+
+        /// <summary>
+        /// 从本地取出瓦片图方法
+        /// </summary>
+        /// <param name="tileLevel"></param>
+        /// <param name="tilePositionX"></param>
+        /// <param name="tilePositionY"></param>
+        /// <returns></returns>
         protected internal override object GetTileLayers(int tileLevel, int tilePositionX, int tilePositionY)
         {
             if (tileLevel > 8)
             {
-                if (InfoStruct.DataFilePTR > 0)
+                tileLevel = tileLevel - 8;
+            }
+
+            string imgDir = this.imgDir;
+            string imgPath = imgDir + $"{tileLevel}\\{tilePositionX}\\{tilePositionY}.jpg";
+            if (File.Exists(imgPath))
+            {
+                Bitmap b = (Bitmap)Image.FromFile(imgPath);
+                //b.Save("D:\\12.jpg");
+                Bitmap bmp = new Bitmap(b.Width, b.Height);
+                Graphics g = Graphics.FromImage(bmp);
+                g.DrawImage(b, 0, 0, b.Width, b.Height);
+                //g.DrawString($"{tileLevel}\\{tilePositionX}_{tilePositionY}.jpg", new Font("宋体", 15), Brushes.Red, 0, 30);
+                //g.DrawRectangle(new Pen(Brushes.Red), 0, 0, b.Width, b.Height);
+
+                byte[] bytes;
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    return LoadImage(InfoStruct.DataFilePTR, tileLevel, tilePositionX, tilePositionY);
+                    bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    bytes = ms.ToArray();
+
+                    //// 把 byte[] 写入文件
+                    //FileStream fs = new FileStream("D:\\2.jpg", FileMode.Create);
+                    //BinaryWriter bw = new BinaryWriter(fs);
+                    //bw.Write(bytes);
+                    //bw.Close();
+                    //fs.Close();
                 }
+
+                return new MemoryStream(bytes);
+            }
+            else
+            {
                 return null;
             }
-            return null;
         }
-
         public override void GetTileLayersAngle(ref double CenterX, ref double CenterY, ref double refAngle, ref double OffsetX, ref double OffsetY)
         {
             if (Msi.ZoomableCanvas != null)
@@ -176,5 +229,6 @@ namespace DivideToolControls.Model
             }
             return null;
         }
+
     }
 }

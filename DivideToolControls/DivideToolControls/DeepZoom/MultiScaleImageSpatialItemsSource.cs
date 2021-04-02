@@ -47,7 +47,11 @@ namespace DivideToolControls.DeepZoom
 				}
 			}
 		}
-
+		/// <summary>
+		/// 取图片核心索引器
+		/// </summary>
+		/// <param name="i"></param>
+		/// <returns></returns>
 		public object this[int i]
 		{
 			get
@@ -70,7 +74,7 @@ namespace DivideToolControls.DeepZoom
 					return new VisualTile(tile, _tileSource, _tileCache[tileId]);
 				}
 				VisualTile tileVm = new VisualTile(tile, _tileSource);
-				object tileLayers = _tileSource.GetTileLayers(tile.Level, tile.Column, tile.Row);
+				object tileLayers = _tileSource.GetTileLayers(tile.Level, tile.Column, tile.Row); // 取图
 				Uri uri = tileLayers as Uri;
 				if (uri != null) // 网络地址
 				{
