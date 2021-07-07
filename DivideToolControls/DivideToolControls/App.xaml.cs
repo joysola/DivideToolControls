@@ -15,6 +15,7 @@ namespace DivideToolControls
     /// </summary>
     public partial class App : Application
     {
+        // 读取配置文件Config.ini数据
         public App()
         {
             IniFile ifile = new IniFile(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "Config.ini");

@@ -1,6 +1,7 @@
 ﻿using DivideToolControls.AnnotationControls;
 using DivideToolControls.DeepZoom;
 using DivideToolControls.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Xml;
 using System.Xml.Linq;
@@ -167,6 +169,95 @@ namespace DivideToolControls.Helper
                 result = xAttribute.Value;
             }
             return result;
+        }
+
+        public void SaveAnoXmlFile(List<AnnoBase> objectlist)
+        {
+            try
+            {
+                var TempPath = Directory.GetCurrentDirectory();
+                var TempFilename = "\\xxx";
+                if (objectlist.Count != 0 /*|| Ischange*/)
+                {
+                    int num = 0;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
+                    xmlWriterSettings.Indent = true;
+                    xmlWriterSettings.IndentChars = " ";
+                    XmlWriter xmlWriter = XmlWriter.Create(stringBuilder);
+                    xmlWriter.WriteStartElement("Slide");
+                    if (objectlist.Count >= 0)
+                    {
+                        xmlWriter.WriteStartElement("Annotations");
+                        xmlWriter.WriteStartElement("Regions");
+                        foreach (AnnoBase item in objectlist)
+                        {
+                            item.WriteXml(xmlWriter);
+                        }
+                        xmlWriter.WriteEndElement();
+                        xmlWriter.WriteEndElement();
+                        num++;
+                    }
+                    //if (isPerson)
+                    //{
+                    //    xmlWriter.WriteStartElement("ImageProcess");
+                    //xmlWriter.WriteAttributeString("Gama", Gama_Personal.ToString());
+                    //xmlWriter.WriteAttributeString("Brightness", Bright_Personal.ToString());
+                    //xmlWriter.WriteAttributeString("Contrast", Contrast_Personal.ToString());
+                    //xmlWriter.WriteAttributeString("R", R_Personal.ToString());
+                    //xmlWriter.WriteAttributeString("G", G_Personal.ToString());
+                    //xmlWriter.WriteAttributeString("B", B_Personal.ToString());
+                    //xmlWriter.WriteEndElement();
+                    //xmlWriter.WriteEndElement();
+                    //num++;
+                    //}
+                    xmlWriter.Flush();
+                    xmlWriter.Close();
+                    if (File.Exists(TempPath + TempFilename + ".Ano"))
+                    {
+                        File.Delete(TempPath + TempFilename + ".Ano");
+                    }
+                    if (num >= 1)
+                    {
+                        FileStream fileStream = new FileStream(TempPath + TempFilename + ".Ano", FileMode.OpenOrCreate);
+                        byte[] bytes = new UTF8Encoding().GetBytes(stringBuilder.Replace("utf-16", "gb2312").ToString());
+                        fileStream.Write(bytes, 0, bytes.Length);
+                        fileStream.Close();
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+
+        public void SaveAnnoJson(List<AnnoBase> objectlist)
+        {
+            var json = JsonConvert.SerializeObject(objectlist, Newtonsoft.Json.Formatting.Indented,
+new JsonSerializerSettings
+{
+    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+    ReferenceLoopHandling = ReferenceLoopHandling.Serialize
+});
+            using (var fileStream = new FileStream(Directory.GetCurrentDirectory() + "\\xxx.json", FileMode.OpenOrCreate))
+            {
+                var bytes = Encoding.UTF8.GetBytes(json);
+                fileStream.Write(bytes, 0, bytes.Length);
+            }
+        }
+
+        public void SaveAnnoXaml(List<AnnoBase> objectlist)
+        {
+            foreach (var anno in objectlist)
+            {
+                var str = XamlWriter.Save(anno);
+                using (var fileStream = new FileStream(Directory.GetCurrentDirectory() + "\\xxx.xaml", FileMode.OpenOrCreate))
+                {
+                    var bytes = Encoding.UTF8.GetBytes(str);
+                    fileStream.Write(bytes, 0, bytes.Length);
+                }
+            }
         }
     }
 }

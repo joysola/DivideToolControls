@@ -122,5 +122,12 @@ namespace DivideToolControls.Controls
             _annoRect.FinishEvent += AnnoWindHelper.Instance.FinishEvent;
             AnnoWindHelper.Instance.SetAnnoRadioButton(false);
         }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            XmlHelper.Instance.SaveAnoXmlFile(ZoomModel.ObjList);
+            XmlHelper.Instance.SaveAnnoJson(ZoomModel.ObjList);
+            XmlHelper.Instance.SaveAnnoXaml(ZoomModel.ObjList);
+        }
     }
 }

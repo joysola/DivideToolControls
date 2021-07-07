@@ -73,8 +73,6 @@ namespace DivideToolControls.Helper
             ZoomModel.LayoutBody.MouseMove += LayoutBody_MouseMove;
             ZoomModel.Magfier.MagnifierScale = Setting.Magnifier;
             ZoomableCanvas.Refresh += (sender, e) =>
-
-
             {
                 ZoomModel.RefreshAction?.Invoke();
             };
@@ -456,9 +454,11 @@ namespace DivideToolControls.Helper
             ZoomModel.ALC.Tbx = ZoomModel.AnnoListWind.txt_xbz;
             ZoomModel.ALC.qsr = ZoomModel.AnnoListWind.txt_qsr;
 
-            if (File.Exists(TempPath + TempFilename + ".Ano"))
+            //if (File.Exists(TempPath + TempFilename + ".Ano"))
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\xxx" + ".Ano"))
             {
-                XmlHelper.Instance.LoadAnoXml(TempPath + TempFilename + ".Ano");
+                //XmlHelper.Instance.LoadAnoXml(TempPath + TempFilename + ".Ano");
+                XmlHelper.Instance.LoadAnoXml(Directory.GetCurrentDirectory() + "\\xxx" + ".Ano");
                 if (ZoomModel.ObjList.Count > 0)
                 {
                     XmlHelper.Instance.IsChanged = true;

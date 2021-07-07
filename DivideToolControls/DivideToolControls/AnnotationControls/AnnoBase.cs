@@ -1,6 +1,7 @@
 ﻿using DivideToolControls.DeepZoom;
 using DivideToolControls.DynamicGeometry.Enum;
 using DivideToolControls.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +48,7 @@ namespace DivideToolControls.AnnotationControls
         public Visibility isVisble { get; set; }
 
         public bool isMsVisble { get; set; }
-
+        [JsonIgnore]
         public List<AnnoBase> objectlist { get; set; }
 
         public ComboBox CB { get; set; }
@@ -59,7 +60,7 @@ namespace DivideToolControls.AnnotationControls
         public Image M_image { get; set; }
 
         public double Zoom { get; set; }
-
+        [JsonIgnore]
         public MultiScaleImage msi { get; set; }
 
         public AnnoListCtls AnnoControl { get; set; }
