@@ -24,7 +24,7 @@ namespace DivideToolControls.AnnotationControls
 
         private Image NewImage { get; set; }
 
-        public AnnoPin(AnnoListCtls alc, Canvas canvasboard, MultiScaleImage msi, int SlideZoom, List<AnnoBase> objectlist)
+        public AnnoPin(AnnoListCtls alc, Canvas canvasboard, MultiScaleImage msi, List<AnnoBase> objectlist,int SlideZoom )
         {
             SetPara(alc, canvasboard, msi, objectlist, SlideZoom, base.Calibration);
             msi.MouseLeftButtonDown += Pinline_handle_MouseDown;

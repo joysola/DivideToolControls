@@ -1,21 +1,32 @@
 ﻿<UserControl x:Class="DivideToolControls.Controls.AnnoTools"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:DivideToolControls.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="70" d:DesignWidth="400">
+             mc:Ignorable="d"
+             d:DesignHeight="70"
+             d:DesignWidth="400">
     <Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Content="直线" Margin="10,0,0,0" Click="Btn_Line"/>
-            <Button Content="矩形" Margin="10,0,0,0" Click="Btn_Rect"/>
-            <Button Content="直线" Margin="10,0,0,0"/>
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Left">
             <Button Content="直线"
-                    Margin="10,0,0,0" />
+                    Margin="10,0,0,0"
+                    Click="Btn_Line" />
+            <Button Content="矩形"
+                    Margin="10,0,0,0"
+                    Click="Btn_Rect" />
+            <Button Content="箭头"
+                    Margin="10,0,0,0"
+                    Click="Btn_Arrow" />
+            <Button Content="椭圆"
+                    Margin="10,0,0,0"
+                    Click="Btn_Ellipse" />
+            <Button Content="曲线"
+                    Margin="10,0,0,0" Click="Btn_Polyline"/>
             <Button Content="保存"
-                    Margin="10,0,0,0" 
-                    Click="Save_Click"/>
-        </StackPanel>   
+                    Margin="10,0,0,0"
+                    Click="Save_Click" />
+        </StackPanel>
     </Grid>
 </UserControl>

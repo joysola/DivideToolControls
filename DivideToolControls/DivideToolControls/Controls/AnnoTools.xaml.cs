@@ -123,11 +123,44 @@ namespace DivideToolControls.Controls
             AnnoWindHelper.Instance.SetAnnoRadioButton(false);
         }
 
+        private void Btn_Arrow(object sender, RoutedEventArgs e)
+        {
+            UnLoadHandle();
+            _annoArrow = new AnnoArrow(ZoomModel.ALC, ZoomModel.Canvasboard, msi, ZoomModel.ObjList, ZoomModel.SlideZoom, ZoomModel.Calibration);
+            _annoArrow.FinishEvent += AnnoWindHelper.Instance.FinishEvent;
+            AnnoWindHelper.Instance.SetAnnoRadioButton(false);
+        }
+
+        private void Btn_Ellipse(object sender, RoutedEventArgs e)
+        {
+            UnLoadHandle();
+            _annoEllipse = new AnnoEllipse(ZoomModel.ALC, ZoomModel.Canvasboard, msi, ZoomModel.ObjList, ZoomModel.SlideZoom, ZoomModel.Calibration);
+            _annoEllipse.FinishEvent += AnnoWindHelper.Instance.FinishEvent;
+            AnnoWindHelper.Instance.SetAnnoRadioButton(false);
+        }
+
+        private void Btn_Pin(object sender, RoutedEventArgs e)
+        {
+            UnLoadHandle();
+            _annoPin = new AnnoPin(ZoomModel.ALC, ZoomModel.Canvasboard, msi, ZoomModel.ObjList, ZoomModel.SlideZoom);
+            _annoPin.FinishEvent += AnnoWindHelper.Instance.FinishEvent;
+            AnnoWindHelper.Instance.SetAnnoRadioButton(false);
+        }
+
+        private void Btn_Polyline(object sender, RoutedEventArgs e)
+        {
+            UnLoadHandle();
+            _annoPolyline = new AnnoPolyline(ZoomModel.ALC, ZoomModel.Canvasboard, msi, ZoomModel.ObjList, ZoomModel.SlideZoom, ZoomModel.Calibration);
+            _annoPolyline.FinishEvent += AnnoWindHelper.Instance.FinishEvent;
+            AnnoWindHelper.Instance.SetAnnoRadioButton(false);
+        }
+
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             XmlHelper.Instance.SaveAnoXmlFile(ZoomModel.ObjList);
-            XmlHelper.Instance.SaveAnnoJson(ZoomModel.ObjList);
-            XmlHelper.Instance.SaveAnnoXaml(ZoomModel.ObjList);
+            //XmlHelper.Instance.SaveAnnoJson(ZoomModel.ObjList);
+            //XmlHelper.Instance.SaveAnnoXaml(ZoomModel.ObjList);
         }
+
     }
 }
